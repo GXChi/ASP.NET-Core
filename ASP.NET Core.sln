@@ -9,8 +9,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4.Asp.NetCore.Business", "4
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.Asp.NetCore.WebAPI", "2.Asp.NetCore.WebAPI", "{352870DE-520E-4DA8-A6BC-43756B776319}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{263B680C-2B90-445F-AD5B-02F65E5526A3}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MvcMovie", "1.Asp.NetCore.Web\MvcMovie\MvcMovie.csproj", "{E16D4514-BB06-4B60-AC00-C76C24070572}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RazorPagesMovie", "1.Asp.NetCore.Web\RazorPagesMovie\RazorPagesMovie.csproj", "{CFF13A2A-1F6A-417D-82A0-2AEDEE299ABD}"
