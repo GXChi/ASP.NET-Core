@@ -1,4 +1,4 @@
-﻿using CloudNote.Enity;
+﻿using CloudNote.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 
@@ -12,7 +12,7 @@ namespace CloudNote.Core
         
         }
 
-        public DbSet<Folder> Folder { get; set; }
+        public DbSet<FolderEntity> Folder { get; set; }
 
     }
 }
