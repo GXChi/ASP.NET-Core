@@ -1,6 +1,12 @@
+using CloudNote.Core;
+using CloudNote.Core.SqlServer.Repositories;
+using CloudNote.Domain.IRepositories;
+using CloudNote.Service;
+using CloudNote.Service.NoteApp;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -16,6 +22,7 @@ namespace CloudNote.Web
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            MyMapper.Initialize();
         }
 
         public IConfiguration Configuration { get; }
@@ -24,6 +31,13 @@ namespace CloudNote.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            services.AddMvc();
+            services.AddSession();
+            services.AddDbContext<CloudNoteDbContext>(optios =>
+             optios.UseSqlServer(Configuration.GetConnectionString("SqlServerString")));
+            services.AddScoped<INoteRepository, NoteRepository>();
+            services.AddScoped<INoteAppService, NoteAppService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

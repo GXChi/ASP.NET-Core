@@ -1,91 +1,35 @@
 ﻿@{
     Layout = "_NoteLayout";
-    ViewData["Title"] = "NoteIndex";
+    ViewData["Title"] = "我的文档";
 }
 
 <link rel="stylesheet" href="editormd/css/editormd.css" />
 <link href="~/editormd/css/editormd.css" rel="stylesheet" />
-
-<header>
-    <h1>Themes</h1>
-    <p>
-        <select id="editormd-theme-select">
-            <option selected="selected" value="">select Editor.md themes</option>
-        </select>
-        <select id="editor-area-theme-select">
-            <option selected="selected" value="">select editor area themes</option>
-        </select>
-        <select id="preview-area-theme-select">
-            <option selected="selected" value="">select preview area themes</option>
-        </select>
-    </p>
-</header>
-<div class="editormd" id="editor">
-    <textarea class="editormd-markdown-textarea" id="markdowid">
-        ### 关于 Editor.md
-    </textarea>
-
-    <!-- html textarea 需要开启配置项 saveHTMLToTextarea == true -->
-    <textarea class="editormd-html-textarea" name="$id-html-code"></textarea>
-</div>
-<style>
-    .CodeMirror {
-        /*height: auto !important;*/
-    }
-</style>
 <script src="https://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
 <script src="editormd/editormd.min.js"></script>
-<script type="text/javascript">
-    function themeSelect(id, themes, lsKey, callback) {
-        var select = $("#" + id);
-
-        for (var i = 0, len = themes.length; i < len; i++) {
-            var theme = themes[i];
-            var selected = (localStorage[lsKey] == theme) ? " selected=\"selected\"" : "";
-
-            select.append("<option value=\"" + theme + "\"" + selected + ">" + theme + "</option>");
-        }
-
-        select.bind("change", function () {
-            var theme = $(this).val();
-
-            if (theme === "") {
-                alert("theme == \"\"");
-                return false;
-            }
-
-            console.log("lsKey =>", lsKey, theme);
-
-            localStorage[lsKey] = theme;
-            callback(select, theme);
-        });
-
-        return select;
+<style>
+    .noteInfo {
     }
+</style>
+<div class="noteInfo">
+    <ul class="list-group" style="width:250px;height:960px;border-right: 1px solid rgba(0,0,0,.125);">
+        @{
+            var noteList = ViewBag.NoteList as List<CloudNote.Domain.Entities.NoteEntity>;
+            if (noteList != null && noteList.Count > 0)
+            {
+                foreach (var note in noteList)
+                {
+                    <li class="list-group-item" style="border:none;border-bottom:1px solid rgba(0,0,0,.125)">@note.Name</li>
+                }
+            }
+            else
+            {
+                <lable style="margin:20px">目前没有笔记，请新建笔记！</lable>
+            }
+        }
+    </ul>
+</div>
 
-    $(function () {
-        var editor = editormd("editor", {
-            width: "90%",
-            height: 640,
-            path: "editormd/lib/",
-            saveHTMLToTextarea: true
-        });
-
-        //editor.getMarkdown();       // 获取 Markdown 源码
-        //editor.getHTML();           // 获取 Textarea 保存的 HTML 源码
-        //editor.getPreviewedHTML();  // 获取预览窗口里的 HTML，在开启 watch 且没有开启 saveHTMLToTextarea 时使用
-
-        themeSelect("editormd-theme-select", editormd.themes, "theme", function ($this, theme) {
-            editor.setTheme(theme);
-        });
-
-        themeSelect("editor-area-theme-select", editormd.editorThemes, "editorTheme", function ($this, theme) {
-            editor.setCodeMirrorTheme(theme);
-            // or testEditor.setEditorTheme(theme);
-        });
-
-        themeSelect("preview-area-theme-select", editormd.previewThemes, "previewTheme", function ($this, theme) {
-            editor.setPreviewTheme(theme);
-        });          
-    });
-</script>
+@section Scripts {
+    @{await Html.RenderPartialAsync("Edit");}
+}

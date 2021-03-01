@@ -12,7 +12,8 @@ namespace CloudNote.Core
         
         }
 
-        public DbSet<FolderEntity> Folder { get; set; }
+        public DbSet<FolderEntity> Folder{ get; set; }
+        public DbSet<NoteEntity> Note { get; set; }
 
     }
 }

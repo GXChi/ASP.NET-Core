@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using CloudNote.Service.NoteApp;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -9,10 +10,16 @@ namespace CloudNote.Web.Controllers
 {
     public class NoteController : Controller
     {
+        private INoteAppService _noteAppService;
+        public NoteController(INoteAppService noteAppService)
+        {
+            _noteAppService = noteAppService;
+        }
         // GET: NoteController
         public ActionResult Index()
         {
-            return View();
+            var notes = _noteAppService.GetAll();
+            return View(notes);
         }
 
         // GET: NoteController/Details/5

@@ -8,4 +8,10 @@
     <Folder Include="wwwroot\custom\js\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\0.Asp.NetCore.Domain\CloudNote.Domain\CloudNote.Domain.csproj" />
+    <ProjectReference Include="..\..\4.Asp.NetCore.Business\CloudNote.Service\CloudNote.Service.csproj" />
+    <ProjectReference Include="..\..\5.Asp.NetCore.DAO\CloudNote.Core\CloudNote.Core.SqlServer.csproj" />
+  </ItemGroup>
+
 </Project>
