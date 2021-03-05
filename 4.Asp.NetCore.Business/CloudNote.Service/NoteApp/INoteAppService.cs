@@ -9,7 +9,7 @@ namespace CloudNote.Service.NoteApp
 {
     public interface INoteAppService
     {
-        NoteDto Insert(NoteDto dto);
+        NoteDto Insert(NoteEntity dto);
 
         List<NoteDto> GetAll();
 
@@ -19,7 +19,9 @@ namespace CloudNote.Service.NoteApp
 
         void Delete(Guid id);
 
-        NoteDto Update(NoteEntity article);
+        NoteDto Update(NoteEntity entity);
+
+        NoteDto InsertOrUpdate(NoteEntity entity);
 
         //List<NoteDto> GetPage(int startPage, int pageSize, out int rowCount, Expression<Func<NoteEntity, bool>> where, Expression<Func<NoteEntity, object>> order);
 

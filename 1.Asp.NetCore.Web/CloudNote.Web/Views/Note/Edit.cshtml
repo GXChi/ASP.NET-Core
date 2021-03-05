@@ -16,10 +16,13 @@
     <div class="editormd" id="editor">
         <textarea class="editormd-markdown-textarea" id="markdowid">
         ### 关于 Editor.md
-    </textarea>
+        </textarea>
 
         <!-- html textarea 需要开启配置项 saveHTMLToTextarea == true -->
         <textarea class="editormd-html-textarea" name="$id-html-code"></textarea>
+    </div>
+    <div>
+        <button id="noteSave">提交</button>
     </div>
 </div>
 <script type="text/javascript">
@@ -73,6 +76,22 @@
 
         themeSelect("preview-area-theme-select", editormd.previewThemes, "previewTheme", function ($this, theme) {
             editor.setPreviewTheme(theme);
+        });
+    
+        $("#noteSave").click(function () {
+            var data = { Content: editor.getHTML() }
+            console.log(data);
+            $.ajax({
+               type: 'POST',
+               url: '@Url.Action("Create","Note")',
+               data: data,
+               success: function (message) {
+                   alert("保存成功");
+               },
+               error: function (request, status, err) {
+                   alert("保存失败");
+               }
+            });
         });
     });
 </script>

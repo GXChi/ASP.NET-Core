@@ -1,4 +1,5 @@
-﻿using CloudNote.Service.NoteApp;
+﻿using CloudNote.Domain.Entities;
+using CloudNote.Service.NoteApp;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -36,16 +37,22 @@ namespace CloudNote.Web.Controllers
 
         // POST: NoteController/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        //[ValidateAntiForgeryToken]
+        public ActionResult Create(NoteEntity entity)
         {
             try
             {
+                if (ModelState.IsValid)
+                {
+                    entity.Id = Guid.NewGuid();
+                    _noteAppService.InsertOrUpdate(entity);
+                }
                 return RedirectToAction(nameof(Index));
+               
             }
             catch
             {
-                return View();
+                return View("Edit");
             }
         }
 

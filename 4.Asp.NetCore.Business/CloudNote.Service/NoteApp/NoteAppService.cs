@@ -18,13 +18,17 @@ namespace CloudNote.Service.NoteApp
             _noteRepository = noteRepository;
         }
 
-        public NoteDto Insert(NoteDto dto)
+        public NoteDto Insert(NoteEntity entity)
         {
             var mapper = mapperConfig.CreateMapper();
-            var note = _noteRepository.Insert(mapper.Map< NoteEntity > (dto));
+            var note = _noteRepository.Insert(entity);
             return mapper.Map<NoteDto>(note);
         }
-
+        public NoteDto Update(NoteEntity note)
+        {
+            var mapper = mapperConfig.CreateMapper();
+            return mapper.Map<NoteDto>(_noteRepository.Update(note));
+        }
         public List<NoteDto> GetAll()
         {
             var mapper = mapperConfig.CreateMapper();
@@ -50,12 +54,20 @@ namespace CloudNote.Service.NoteApp
         public void Delete(Guid id)
         {
             _noteRepository.Delete(id);
-        }
+        }             
 
-        public NoteDto Update(NoteEntity note)
+        public NoteDto InsertOrUpdate(NoteEntity note)
         {
             var mapper = mapperConfig.CreateMapper();
-            return mapper.Map<NoteDto>(_noteRepository.Update(note));
+            var data = Get(note.Id);
+            if (data != null)
+            {
+                return Update(note);
+            }
+            else
+            {
+                return Insert(note);
+            }
         }
 
         //public List<NoteDto> GetPage(int startPage, int pageSize, out int rowCount, Expression<Func<NoteEntity, bool>> where, Expression<Func<NoteEntity, object>> order)
