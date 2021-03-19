@@ -1,7 +1,63 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+<script>
 
+
+    //$(function () {
+    //    $("#type").change(function () {
+    //        if ($(this).val() == "歌手") {                          
+    //            $("#name option[value = '成龙']").attr("disabled", true);
+    //        }
+    //        else {
+    //            $("#name option[value = '成龙']").removeAttr("disabled");
+    //        }
+    //    })
+    //})
+    $(function () {
+        debugger;
+        fib(6);
+    })
+    function fib(max) {
+        var n = 0;
+        var a = 0;
+        var b = 1;
+        while (n < max) {
+            window.console.log(b);
+             var c = b;
+             b = a + b;
+             a = b;
+            n++;
+        }
+    }
+
+    function selectChange(selectValue) {
+
+        newValue = $("#type").val();
+
+        if (selectValue == "歌手") {
+            $("#name option[value = '成龙']").attr("disabled", true);
+        } 
+        else {
+            $("#name option[value = '成龙']").removeAttr("disabled");
+        }
+    }
+    
+</script>
+<div style="margin-left:20px">
+    <label>类型</label>
+    <select id="type" onchange="selectChange($(this).val())">
+        <option value="歌手">歌手</option>
+        <option value="演员">演员</option>
+    </select>
+
+    <label>名字</label>
+    <select id="name">
+        <option value="迈克尔">迈克尔</option>
+        <option value="谢霆锋">谢霆锋</option>
+        <option value="成龙">成龙</option>
+    </select>
+</div>
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>

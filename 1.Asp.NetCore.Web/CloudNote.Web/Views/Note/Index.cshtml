@@ -11,6 +11,26 @@
     .noteInfo {
     }
 </style>
+<script>
+    function getContentInfo(noteID) {
+        var url = '@Url.Action("GetNote", "Note")?noteID=' + noteID;
+        $.ajax({
+            type: "GET",
+            url: url,
+            dataType: "json",
+            success: function (data) {               
+                if (data != null) {
+                    $("#markdowid").text(data.content);
+                } else {
+                    $("#searchResult").html("出现错误：" + data.msg);
+                }
+            },
+            error: function (jqXHR) {
+                alert("发生错误：" + jqXHR.status);
+            }
+        })
+    }
+</script>
 <div class="noteInfo">
     <ul class="list-group" style="width:250px;height:960px;border-right: 1px solid rgba(0,0,0,.125);">
         @{
@@ -19,7 +39,9 @@
             {
                 foreach (var note in Model)
                 {
-                    <li class="list-group-item" style="border:none;border-bottom:1px solid rgba(0,0,0,.125)">@note.Content</li>
+                    <li class="list-group-item" style="border:none;border-bottom:1px solid rgba(0,0,0,.125)">
+                        <a onclick="getContentInfo('@note.Id')">@note.Content</a>
+                    </li>
                 }
             }
             else

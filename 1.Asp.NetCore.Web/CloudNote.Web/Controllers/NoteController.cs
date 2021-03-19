@@ -1,5 +1,6 @@
 ﻿using CloudNote.Domain.Entities;
 using CloudNote.Service.NoteApp;
+using CloudNote.Service.NoteApp.Dtos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -21,6 +22,16 @@ namespace CloudNote.Web.Controllers
         {
             var notes = _noteAppService.GetAll();
             return View(notes);
+        }
+
+        public JsonResult GetNote(Guid noteID)
+        {
+            var notes = new NoteDto();
+            if (!string.IsNullOrEmpty(noteID.ToString()))
+            {
+                notes = _noteAppService.Get(noteID);
+            }         
+            return Json(notes);
         }
 
         // GET: NoteController/Details/5

@@ -6,6 +6,9 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\custom\js\" />
+    <Folder Include="wwwroot\mini-ui\css\" />
+    <Folder Include="wwwroot\mini-ui\js\" />
+    <Folder Include="wwwroot\mini-ui\image\" />
   </ItemGroup>
 
   <ItemGroup>
