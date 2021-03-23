@@ -1,0 +1,30 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "provider": "unpkg",
+      "library": "vue-tree-list@1.5.0",
+      "destination": "wwwroot/vue/vue-tree-list/"
+    },
+    {
+      "library": "vue@2.6.12",
+      "destination": "wwwroot/vue/"
+    },
+    {
+      "provider": "unpkg",
+      "library": "ztree@3.5.24",
+      "destination": "wwwroot/ztree/"
+    },
+    {
+      "provider": "unpkg",
+      "library": "bootstrap@5.0.0-beta2",
+      "destination": "wwwroot/bootstrap/"
+    },
+    {
+      "provider": "unpkg",
+      "library": "bootstrap-icons@1.4.0",
+      "destination": "wwwroot/bootstrap/bootstrap-icons/"
+    }
+  ]
+}
