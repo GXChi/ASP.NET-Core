@@ -1,47 +1,21 @@
 ﻿@{
-    Layout = "_NoteLayout";
+    Layout = "_Layout";
     ViewData["Title"] = "我的文档";
 }
 @model List<CloudNote.Service.NoteApp.Dtos.NoteDto>
-<link rel="stylesheet" href="editormd/css/editormd.css" />
-<link href="~/editormd/css/editormd.css" rel="stylesheet" />
-<script src="https://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
-<script src="editormd/editormd.min.js"></script>
-<style>
-    .noteInfo {
-    }
-</style>
-<script>
-    function getContentInfo(noteID) {
-        var url = '@Url.Action("GetNote", "Note")?noteID=' + noteID;
-        $.ajax({
-            type: "GET",
-            url: url,
-            dataType: "json",
-            success: function (data) {               
-                if (data != null) {
-                    $("#markdowid").text(data.content);
-                } else {
-                    $("#searchResult").html("出现错误：" + data.msg);
-                }
-            },
-            error: function (jqXHR) {
-                alert("发生错误：" + jqXHR.status);
-            }
-        })
-    }
-</script>
-<div class="noteInfo">
-    <ul class="list-group" style="width:250px;height:960px;border-right: 1px solid rgba(0,0,0,.125);">
+
+<main class="col-my-lg-11 ms-sm-auto px-md-3" style="margin-top: 50px;">
+    <div class="d-flex justify-content-between flex-wrap @*flex-md-nowrap*@ align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Dashboard</h1>
         @{
             var noteList = ViewBag.NoteList as List<CloudNote.Domain.Entities.NoteEntity>;
             if (Model != null && Model.Count > 0)
             {
                 foreach (var note in Model)
                 {
-                    <li class="list-group-item" style="border:none;border-bottom:1px solid rgba(0,0,0,.125)">
+                    <div style="border: 1px solid #2280ed;">
                         <a onclick="getContentInfo('@note.Id')">@note.Content</a>
-                    </li>
+                    </div>
                 }
             }
             else
@@ -49,9 +23,197 @@
                 <lable style="margin:20px">目前没有笔记，请新建笔记！</lable>
             }
         }
-    </ul>
-</div>
+    </div>
+</main>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("Edit");}
-}
+<main class="col-my-lg-78 sm-auto px-md-3" style="margin-top: 100px;">
+    <h2>Section title</h2>
+    <div>
+        <button class="btn btn-danger" onclick="$('#noteEditmdEdit').show(); $('#noteEditmdInfo').hide()">编辑</button>
+        <button class="btn btn-primary">保存</button>
+    </div>
+    <div class="table-responsive">
+        <div id="noteEditmdEdit"  style="display:none">
+            <header>
+                <h1>Themes</h1>
+                <p>
+                    <select id="editormd-theme-select">
+                        <option selected="selected" value="">select Editor.md themes</option>
+                    </select>
+                    <select id="editor-area-theme-select">
+                        <option selected="selected" value="">select editor area themes</option>
+                    </select>
+                    <select id="preview-area-theme-select">
+                        <option selected="selected" value="">select preview area themes</option>
+                    </select>
+                </p>
+            </header>
+            <div class="editormd" id="editor">
+                <textarea class="editormd-markdown-textarea" id="markdowid">
+                ### 关于 Editor.md
+                </textarea>
+
+                <!-- html textarea 需要开启配置项 saveHTMLToTextarea == true -->
+                <textarea class="editormd-html-textarea" name="$id-html-code"></textarea>
+            </div>
+            <div>
+                <button id="noteSave">提交</button>
+                <button onclick="getEditor()">获取</button>
+            </div>
+        </div>
+        <div id="noteEditmdInfo">
+            <div class="editormd" id="editorInfo">
+            </div>
+        </div>
+    </div>
+</main>
+
+
+<link href="~/editormd/css/editormd.css" rel="stylesheet" />
+
+<script src="https://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="~/editormd/lib/marked.min.js"></script>
+<script src="~/editormd/lib/prettify.min.js"></script>
+
+<script src="~/editormd/lib/underscore.min.js"></script>
+<script src="~/editormd/lib/raphael.min.js"></script>
+<script src="~/editormd/lib/sequence-diagram.min.js"></script>
+<script src="~/editormd/lib/flowchart.min.js"></script>
+<script src="~/editormd/lib/jquery.flowchart.min.js"></script>
+
+<script src="~/editormd/editormd.min.js"></script>
+<script src="~/editormd/editormd.js"></script>
+
+<script type="text/javascript">
+    function themeSelect(id, themes, lsKey, callback) {
+        var select = $("#" + id);
+
+        for (var i = 0, len = themes.length; i < len; i++) {
+            var theme = themes[i];
+            var selected = (localStorage[lsKey] == theme) ? " selected=\"selected\"" : "";
+
+            select.append("<option value=\"" + theme + "\"" + selected + ">" + theme + "</option>");
+        }
+
+        select.bind("change", function () {
+            var theme = $(this).val();
+
+            if (theme === "") {
+                alert("theme == \"\"");
+                return false;
+            }
+
+            console.log("lsKey =>", lsKey, theme);
+
+            localStorage[lsKey] = theme;
+            callback(select, theme);
+        });
+
+        return select;
+    }
+    var editor;
+    $(function () {
+        editor = editormd("editor", {
+            width: "90%",
+            height: 640,
+            path: "editormd/lib/",
+            saveHTMLToTextarea: true
+        });
+
+        themeSelect("editormd-theme-select", editormd.themes, "theme", function ($this, theme) {
+            editor.setTheme(theme);
+        });
+
+        themeSelect("editor-area-theme-select", editormd.editorThemes, "editorTheme", function ($this, theme) {
+            editor.setCodeMirrorTheme(theme);
+            // or testEditor.setEditorTheme(theme);
+        });
+
+        themeSelect("preview-area-theme-select", editormd.previewThemes, "previewTheme", function ($this, theme) {
+            editor.setPreviewTheme(theme);
+        });
+
+        $("#noteSave").click(function () {
+            var data = { Content: editor.getMarkdown() }
+            console.log(data);
+            $.ajax({
+               type: 'POST',
+               url: '@Url.Action("Create","Note")',
+               data: data,
+               success: function (message) {
+                   alert("保存成功");
+               },
+               error: function (request, status, err) {
+                   alert("保存失败");
+               }
+            });
+        });
+    });
+
+    function getEditor() {
+        console.log(editor.getMarkdown());     // 获取 Markdown 源码
+        console.log(editor.getHTML());           // 获取 Textarea 保存的 HTML 源码
+        console.log(editor.getPreviewedHTML());  // 获取预览窗口里的 HTML，在开启 watch 且没有开启 saveHTMLToTextarea 时使用
+    }
+
+     function getContentInfo(noteID) {
+            var url = '@Url.Action("GetNote", "Note")?noteID=' + noteID;
+            $.ajax({
+                type: "GET",
+                url: url,
+                dataType: "json",
+                success: function (data) {
+                    if (data != null) {
+                        getEidtiView(data);
+                        $("#noteEditmdEdit").hide();
+                        $("#noteEditmdInfo").show();
+                    } else {
+                        $("#searchResult").html("出现错误：" + data.msg);
+                    }
+                },
+                error: function (jqXHR) {
+                    alert("发生错误：" + jqXHR.status);
+                }
+            })
+    }
+
+    function getEidtiView(data) {
+        $("#editorInfo").html('');
+        editormd.markdownToHTML("editorInfo", {
+            markdown: data.content,//+ "\r\n" + $("#append-test").text(),
+            htmlDecode      : true,       // 开启 HTML 标签解析，为了安全性，默认不开启
+            htmlDecode: "style,script,iframe",  // you can filter tags decode
+            //toc             : false,
+            tocm: true,    // Using [TOCM]
+            //tocContainer    : "#custom-toc-container", // 自定义 ToC 容器层
+            //gfm             : false,
+            //tocDropdown     : true,
+            // markdownSourceCode : true, // 是否保留 Markdown 源码，即是否删除保存源码的 Textarea 标签
+            emoji: true,
+            taskList: true,
+            tex: true,  // 默认不解析
+            flowChart: true,  // 默认不解析
+            sequenceDiagram: true,  // 默认不解析
+        });
+    }
+    function getEidtiView1(data) {
+        testEditormdView2 = editormd.markdownToHTML("editor", {
+            htmlDecode: "style,script,iframe",  // you can filter tags decode
+            emoji: true,
+            taskList: true,
+            tex: true,  // 默认不解析
+            flowChart: true,  // 默认不解析
+            sequenceDiagram: true,  // 默认不解析
+        });
+    }
+</script>
+
+
+
+@*<link rel="stylesheet" href="editormd/css/editormd.css" />
+    <link href="~/editormd/css/editormd.css" rel="stylesheet" />
+
+    <script src="editormd/editormd.min.js"></script>
+    @section Scripts {
+        @{await Html.RenderPartialAsync("Edit");}
+    }*@

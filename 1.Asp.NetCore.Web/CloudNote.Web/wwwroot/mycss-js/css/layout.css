@@ -1,0 +1,81 @@
+﻿.col-my-lg-5 {
+    flex: 0 0 auto;
+    width: 5%;
+}
+
+.col-my-lg-10 {
+    flex: 0 0 auto;
+    width: 10%;
+}
+
+.col-my-lg-11 {
+    flex: 0 0 auto;
+    width: 10.9%;
+}
+
+.col-my-lg-12 {
+    flex: 0 0 auto;
+    width: 11.9%;
+}
+
+.col-my-lg-20 {
+    flex: 0 0 auto;
+    width: 20%;
+}
+
+.col-my-lg-30 {
+    flex: 0 0 auto;
+    width: 30%;
+}
+
+.col-my-lg-40 {
+    flex: 0 0 auto;
+    width: 40%;
+}
+
+.col-my-lg-50 {
+    flex: 0 0 auto;
+    width: 50%;
+}
+
+.col-my-lg-60 {
+    flex: 0 0 auto;
+    width: 60%;
+}
+
+.col-my-lg-70 {
+    flex: 0 0 auto;
+    width: 70%;
+}
+
+.col-my-lg-76 {
+    flex: 0 0 auto;
+    width: 75.9%;
+}
+
+.col-my-lg-78 {
+    flex: 0 0 auto;
+    width: 77.9%;
+}
+
+.col-my-lg-80 {
+    flex: 0 0 auto;
+    width: 80%;
+}
+
+.col-my-lg-90 {
+    flex: 0 0 auto;
+    width: 90%;
+}
+
+.col-my-lg-100 {
+    flex: 0 0 auto;
+    width: 100%;
+}
+
+
+.container-fluid {
+    padding-left:0px;
+}
+
+
