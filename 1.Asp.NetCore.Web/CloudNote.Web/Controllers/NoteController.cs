@@ -20,7 +20,6 @@ namespace CloudNote.Web.Controllers
         // GET: NoteController
         public ActionResult Index()
         {
-            ViewData["Name"] = "最新文档";
             var notes = _noteAppService.GetAll();
             return View(notes);
         }
@@ -56,13 +55,10 @@ namespace CloudNote.Web.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    if (string.IsNullOrWhiteSpace(entity.Id.ToString()))
-                    {
-                        entity.Id = Guid.NewGuid();
-                    }                    
+                    entity.Id = Guid.NewGuid();
                     _noteAppService.InsertOrUpdate(entity);
                 }
-                return RedirectToAction(nameof(GetNote),entity.Id);
+                return RedirectToAction(nameof(Index));
                
             }
             catch

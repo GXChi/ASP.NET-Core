@@ -20,14 +20,12 @@ namespace CloudNote.Service.NoteApp
 
         public NoteDto Insert(NoteEntity entity)
         {
-            entity.CreateDate = DateTime.Now;
             var mapper = mapperConfig.CreateMapper();
             var note = _noteRepository.Insert(entity);
             return mapper.Map<NoteDto>(note);
         }
         public NoteDto Update(NoteEntity note)
         {
-            note.UpdateDate = DateTime.Now;
             var mapper = mapperConfig.CreateMapper();
             return mapper.Map<NoteDto>(_noteRepository.Update(note));
         }
