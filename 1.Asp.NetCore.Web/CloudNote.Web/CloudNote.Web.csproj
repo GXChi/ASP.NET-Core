@@ -8,6 +8,11 @@
     <Folder Include="wwwroot\bootstrap\examples\" />
     <Folder Include="wwwroot\custom\js\" />
     <Folder Include="wwwroot\mycss-js\js\" />
+    <Folder Include="wwwroot\image\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\image\logo.jpg" />
   </ItemGroup>
 
   <ItemGroup>

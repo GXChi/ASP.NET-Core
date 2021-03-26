@@ -1,22 +1,31 @@
 ﻿@{
     Layout = "_Layout";
-    ViewData["Title"] = "我的文档";
+    ViewData["Title"] = "最新文档";
 }
 @model List<CloudNote.Service.NoteApp.Dtos.NoteDto>
-
-<main class="col-my-lg-11 ms-sm-auto px-md-3" style="margin-top: 50px;">
+<style>
+    .bi-nut-fill:hover {
+    }
+</style>
+<main class="col-my-lg-11 ms-sm-auto px-md-3" style="margin-top: 50px;border-right:1px solid #dfe0e1;">
     <div class="d-flex justify-content-between flex-wrap @*flex-md-nowrap*@ align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Dashboard</h1>
+        <h1 class="h3 text-center">@ViewData["Title"]</h1>
         @{
             var noteList = ViewBag.NoteList as List<CloudNote.Domain.Entities.NoteEntity>;
             if (Model != null && Model.Count > 0)
             {
-                foreach (var note in Model)
-                {
-                    <div style="border: 1px solid #2280ed;">
-                        <a onclick="getContentInfo('@note.Id')">@note.Content</a>
-                    </div>
-                }
+                <ul class="nav flex-column" style="width: 100%;">
+                    @foreach (var note in Model)
+                    {
+                        <li class="nav-item" style="        border-bottom: 1px solid #2280ed;height: 50px;">
+                            <a class="nav-link @(note.Id.ToString() == "" ? "":"active")" style="cursor:pointer" onclick="getContentInfo('@note.Id')">
+                                @(string.IsNullOrEmpty(note.Title) ? "无标题笔记" : note.Title)
+                                <i class="bi-nut-fill" onclick=""></i>
+                            </a>
+                        </li>
+
+                    }
+                </ul>
             }
             else
             {
@@ -29,11 +38,15 @@
 <main class="col-my-lg-78 sm-auto px-md-3" style="margin-top: 100px;">
     <h2>Section title</h2>
     <div>
-        <button class="btn btn-danger" onclick="$('#noteEditmdEdit').show(); $('#noteEditmdInfo').hide()">编辑</button>
+        <input name="Title" id="titel" placeholder="请输入标题" />
+        <button class="btn btn-primary" onclick="createNote()">新建笔记</button>
+        <button class="btn btn-danger" onclick="eidtMD()">编辑</button>
+        <button class="btn btn-danger" onclick="hideEidtMD()">隐藏</button>
+        
         <button class="btn btn-primary">保存</button>
     </div>
     <div class="table-responsive">
-        <div id="noteEditmdEdit"  style="display:none">
+        <div id="noteEditmdEdit" @*style="display:none"*@>
             <header>
                 <h1>Themes</h1>
                 <p>
@@ -61,17 +74,19 @@
                 <button onclick="getEditor()">获取</button>
             </div>
         </div>
+
         <div id="noteEditmdInfo">
             <div class="editormd" id="editorInfo">
             </div>
         </div>
+
     </div>
 </main>
 
 
 <link href="~/editormd/css/editormd.css" rel="stylesheet" />
 
-<script src="https://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+@*<script src="https://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>*@
 <script src="~/editormd/lib/marked.min.js"></script>
 <script src="~/editormd/lib/prettify.min.js"></script>
 
@@ -134,7 +149,8 @@
         });
 
         $("#noteSave").click(function () {
-            var data = { Content: editor.getMarkdown() }
+            var title = $("#title").val();
+            var data = { Content: editor.getMarkdown(), Title: title }
             console.log(data);
             $.ajax({
                type: 'POST',
@@ -165,7 +181,7 @@
                 success: function (data) {
                     if (data != null) {
                         getEidtiView(data);
-                        $("#noteEditmdEdit").hide();
+                        hideEidtMD();
                         $("#noteEditmdInfo").show();
                     } else {
                         $("#searchResult").html("出现错误：" + data.msg);
@@ -175,6 +191,20 @@
                     alert("发生错误：" + jqXHR.status);
                 }
             })
+    }
+
+    function createNote() {
+         $.ajax({
+               type: 'POST',
+               url: '@Url.Action("Create","Note")',
+               success: function (message) {
+                   alert("保存成功");
+                   getContentInfo();
+               },
+               error: function (request, status, err) {
+                   alert("保存失败");
+               }
+            });
     }
 
     function getEidtiView(data) {
@@ -197,14 +227,40 @@
         });
     }
     function getEidtiView1(data) {
-        testEditormdView2 = editormd.markdownToHTML("editor", {
+        //testEditormdView2 = editormd.markdownToHTML("editor", {
+        //    htmlDecode: "style,script,iframe",  // you can filter tags decode
+        //    emoji: true,
+        //    taskList: true,
+        //    tex: true,  // 默认不解析
+        //    flowChart: true,  // 默认不解析
+        //    sequenceDiagram: true,  // 默认不解析
+        //});
+        editormd.markdownToHTML("editor", {
+            markdown: data.content,//+ "\r\n" + $("#append-test").text(),
+            htmlDecode: true,       // 开启 HTML 标签解析，为了安全性，默认不开启
             htmlDecode: "style,script,iframe",  // you can filter tags decode
+            //toc             : false,
+            tocm: true,    // Using [TOCM]
+            //tocContainer    : "#custom-toc-container", // 自定义 ToC 容器层
+            //gfm             : false,
+            //tocDropdown     : true,
+            // markdownSourceCode : true, // 是否保留 Markdown 源码，即是否删除保存源码的 Textarea 标签
             emoji: true,
             taskList: true,
             tex: true,  // 默认不解析
             flowChart: true,  // 默认不解析
             sequenceDiagram: true,  // 默认不解析
         });
+    }
+
+    function eidtMD() {
+        editor.show();
+        getEidtiView1();
+        $("#noteEditmdInfo").hide();
+    }
+
+    function hideEidtMD() {
+        editor.hide();
     }
 </script>
 
