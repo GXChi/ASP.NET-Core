@@ -100,16 +100,17 @@ namespace CloudNote.Web.Controllers
 
         // POST: NoteController/Delete/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        //[ValidateAntiForgeryToken]
+        public JsonResult Delete(Guid id)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                _noteAppService.Delete(id);
+                return Json("删除成功！");
             }
             catch
             {
-                return View();
+                return Json(new Exception().Message);
             }
         }
     }

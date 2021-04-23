@@ -77,7 +77,10 @@ namespace CloudNote.Core.SqlServer.Migrations
                     b.Property<string>("CreateName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Label")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Type")

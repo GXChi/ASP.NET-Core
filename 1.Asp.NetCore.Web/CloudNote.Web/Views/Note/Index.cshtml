@@ -18,7 +18,7 @@
                     @foreach (var note in Model)
                     {
                         <li class="nav-item" style="        border-bottom: 1px solid #2280ed;height: 50px;">
-                            <a class="nav-link @(note.Id.ToString() == "" ? "":"active")" style="cursor:pointer" onclick="getContentInfo('@note.Id')">
+                            <a class="nav-link @(note.Id.ToString() == "" ? "":"active")" style="cursor:pointer" onclick="getNoteInfo('@note.Id')">
                                 @(string.IsNullOrEmpty(note.Title) ? "无标题笔记" : note.Title)
                                 <i class="bi-nut-fill" onclick=""></i>
                             </a>
@@ -36,19 +36,19 @@
 </main>
 
 <main class="col-my-lg-78 sm-auto px-md-3" style="margin-top: 100px;">
-    <h2>Section title</h2>
-    <div>
-        <input name="Title" id="titel" placeholder="请输入标题" />
-        <button class="btn btn-primary" onclick="createNote()">新建笔记</button>
-        <button class="btn btn-danger" onclick="eidtMD()">编辑</button>
-        <button class="btn btn-danger" onclick="hideEidtMD()">隐藏</button>
-        
-        <button class="btn btn-primary">保存</button>
-    </div>
     <div class="table-responsive">
-        <div id="noteEditmdEdit" @*style="display:none"*@>
+        <button class="btn btn-danger" onclick="eidtMD()">编辑</button>
+        <button class="btn btn-primary" onclick="removeNote()">删除</button>
+        <div id="noteEditmdEdit" style="display:none">
+            @*<h2>Section title</h2>*@
+            <div>
+                <input name="Title" id="title" placeholder="请输入标题" />
+                <button class="btn btn-primary" onclick="createNote()">新建笔记</button>
+                <button class="btn btn-danger" onclick="hideEidtMD()">隐藏</button>
+                <button class="btn btn-primary" onclick="saveNote()">保存</button>
+            </div>
             <header>
-                <h1>Themes</h1>
+                @*<h1>Themes</h1>
                 <p>
                     <select id="editormd-theme-select">
                         <option selected="selected" value="">select Editor.md themes</option>
@@ -59,19 +59,15 @@
                     <select id="preview-area-theme-select">
                         <option selected="selected" value="">select preview area themes</option>
                     </select>
-                </p>
+                </p>*@
             </header>
             <div class="editormd" id="editor">
                 <textarea class="editormd-markdown-textarea" id="markdowid">
-                ### 关于 Editor.md
+         
                 </textarea>
 
                 <!-- html textarea 需要开启配置项 saveHTMLToTextarea == true -->
                 <textarea class="editormd-html-textarea" name="$id-html-code"></textarea>
-            </div>
-            <div>
-                <button id="noteSave">提交</button>
-                <button onclick="getEditor()">获取</button>
             </div>
         </div>
 
@@ -81,6 +77,7 @@
         </div>
 
     </div>
+    <input type="hidden" id="noteID" />
 </main>
 
 
@@ -128,12 +125,7 @@
     }
     var editor;
     $(function () {
-        editor = editormd("editor", {
-            width: "90%",
-            height: 640,
-            path: "editormd/lib/",
-            saveHTMLToTextarea: true
-        });
+        initEditor();
 
         themeSelect("editormd-theme-select", editormd.themes, "theme", function ($this, theme) {
             editor.setTheme(theme);
@@ -164,42 +156,84 @@
                }
             });
         });
+
+        getNoteInfo('@Model[0].Id');
     });
 
-    function getEditor() {
-        console.log(editor.getMarkdown());     // 获取 Markdown 源码
-        console.log(editor.getHTML());           // 获取 Textarea 保存的 HTML 源码
-        console.log(editor.getPreviewedHTML());  // 获取预览窗口里的 HTML，在开启 watch 且没有开启 saveHTMLToTextarea 时使用
+    function initEditor() {
+        editor = editormd("editor", {
+            width: "90%",
+            height: 640,
+            path: "editormd/lib/",
+            saveHTMLToTextarea: true
+        });
     }
 
-     function getContentInfo(noteID) {
-            var url = '@Url.Action("GetNote", "Note")?noteID=' + noteID;
-            $.ajax({
-                type: "GET",
-                url: url,
-                dataType: "json",
-                success: function (data) {
-                    if (data != null) {
-                        getEidtiView(data);
-                        hideEidtMD();
-                        $("#noteEditmdInfo").show();
-                    } else {
-                        $("#searchResult").html("出现错误：" + data.msg);
-                    }
-                },
-                error: function (jqXHR) {
-                    alert("发生错误：" + jqXHR.status);
+    function getNoteInfo(noteID) {
+        $("#noteID").val(noteID);
+        var url = '@Url.Action("GetNote", "Note")?noteID=' + noteID;
+        $.ajax({
+            type: "GET",
+            url: url,
+            dataType: "json",
+            success: function (data) {
+                if (data != null) {
+                    $("#noteEditmdInfo").show();
+                    initEidtiToHtml(data);
+                    hideEidtMD();
+                    $("#markdowid").html(data.content);
+                    $("#title").val(data.Title);
+                } else {
+                    $("#searchResult").html("出现错误：" + data.msg);
                 }
-            })
+            },
+            error: function (jqXHR) {
+                alert("发生错误：" + jqXHR.status);
+            }
+        })
     }
 
-    function createNote() {
-         $.ajax({
+    function eidtMD() { 
+        $("#noteEditmdEdit").show();
+        initEditor();
+        editor.show();
+        $("#noteEditmdInfo").hide();
+    }
+
+    function saveNote() {
+        var url = '@Url.Action("Create","Note")';
+        var title = $("#title").val();
+        var id = $("#noteID").val();
+        var data = { Content: editor.getMarkdown(), Title: title, Id: id }
+        postAjax(url, data);
+    }
+
+    function removeNote() {
+         var url = '@Url.Action("Delete", "Note")';
+        var id = $("#noteID").val();
+        var data = { Id: id };
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: data,
+            success: function (message) {
+                alert("删除成功");
+                //getNoteInfo();
+            },
+            error: function (request, status, err) {
+                alert("删除失败");
+            }
+        });
+    }
+
+    function postAjax(url, data) {
+           $.ajax({
                type: 'POST',
-               url: '@Url.Action("Create","Note")',
+               url: url,
+               data: data,
                success: function (message) {
                    alert("保存成功");
-                   getContentInfo();
+                   //getNoteInfo();
                },
                error: function (request, status, err) {
                    alert("保存失败");
@@ -207,7 +241,13 @@
             });
     }
 
-    function getEidtiView(data) {
+    function getEditor() {
+        console.log(editor.getMarkdown());     // 获取 Markdown 源码
+        console.log(editor.getHTML());           // 获取 Textarea 保存的 HTML 源码
+        console.log(editor.getPreviewedHTML());  // 获取预览窗口里的 HTML，在开启 watch 且没有开启 saveHTMLToTextarea 时使用
+    }
+
+    function initEidtiToHtml(data) {
         $("#editorInfo").html('');
         editormd.markdownToHTML("editorInfo", {
             markdown: data.content,//+ "\r\n" + $("#append-test").text(),
@@ -226,41 +266,11 @@
             sequenceDiagram: true,  // 默认不解析
         });
     }
-    function getEidtiView1(data) {
-        //testEditormdView2 = editormd.markdownToHTML("editor", {
-        //    htmlDecode: "style,script,iframe",  // you can filter tags decode
-        //    emoji: true,
-        //    taskList: true,
-        //    tex: true,  // 默认不解析
-        //    flowChart: true,  // 默认不解析
-        //    sequenceDiagram: true,  // 默认不解析
-        //});
-        editormd.markdownToHTML("editor", {
-            markdown: data.content,//+ "\r\n" + $("#append-test").text(),
-            htmlDecode: true,       // 开启 HTML 标签解析，为了安全性，默认不开启
-            htmlDecode: "style,script,iframe",  // you can filter tags decode
-            //toc             : false,
-            tocm: true,    // Using [TOCM]
-            //tocContainer    : "#custom-toc-container", // 自定义 ToC 容器层
-            //gfm             : false,
-            //tocDropdown     : true,
-            // markdownSourceCode : true, // 是否保留 Markdown 源码，即是否删除保存源码的 Textarea 标签
-            emoji: true,
-            taskList: true,
-            tex: true,  // 默认不解析
-            flowChart: true,  // 默认不解析
-            sequenceDiagram: true,  // 默认不解析
-        });
-    }
 
-    function eidtMD() {
-        editor.show();
-        getEidtiView1();
-        $("#noteEditmdInfo").hide();
-    }
 
     function hideEidtMD() {
-        editor.hide();
+        //editor.hide();
+        $("#noteEditmdEdit").hide();
     }
 </script>
 

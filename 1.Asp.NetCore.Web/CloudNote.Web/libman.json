@@ -25,6 +25,11 @@
       "provider": "unpkg",
       "library": "bootstrap-icons@1.4.0",
       "destination": "wwwroot/bootstrap/bootstrap-icons/"
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "layui@2.6.5",
+      "destination": "wwwroot/layui/"
     }
   ]
 }
