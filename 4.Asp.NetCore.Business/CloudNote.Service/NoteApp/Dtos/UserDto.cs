@@ -1,10 +1,12 @@
-﻿using System;
+﻿using CloudNote.Domain.Entities;
+using CloudNote.Domain.Entities.Areas;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace CloudNote.Domain.Entities.Areas
+namespace CloudNote.Service.NoteApp.Dtos
 {
-    public class UserEntity : BaseEntity
+    public class UserDto : BaseEntity
     {
         public string UsreName { get; set; }
         public string NickName { get; set; }

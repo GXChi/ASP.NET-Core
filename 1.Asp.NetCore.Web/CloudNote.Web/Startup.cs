@@ -38,7 +38,13 @@ namespace CloudNote.Web
              optios.UseSqlServer(Configuration.GetConnectionString("SqlServerString")));
             services.AddScoped<INoteRepository, NoteRepository>();
             services.AddScoped<INoteAppService, NoteAppService>();
-
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUserAppService, UserAppService>();
+            services.AddScoped<IRoleRepository, RoleRepository>();
+            services.AddScoped<IRoleAppService, RoleAppService>();
+            services.AddScoped<IPermissionRepository, PermissionRepository>();
+            services.AddScoped<IPermissionAppService, PermissionAppService>();
+          
 
             services.AddControllersWithViews();
             services.AddRazorPages().AddRazorRuntimeCompilation();

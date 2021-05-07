@@ -1,0 +1,7 @@
+﻿@model List<CloudNote.Service.NoteApp.Dtos.UserDto>
+<table>
+    @foreach (var item in Model)
+    {
+        <tr>@item.UsreName</tr>
+    }
+</table>

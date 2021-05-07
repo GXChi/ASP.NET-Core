@@ -4,14 +4,16 @@ using CloudNote.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CloudNote.Core.SqlServer.Migrations
 {
     [DbContext(typeof(CloudNoteDbContext))]
-    partial class CloudNoteDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210507112541_20215701")]
+    partial class _20215701
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -166,22 +168,16 @@ namespace CloudNote.Core.SqlServer.Migrations
                     b.Property<string>("CreateName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Email")
+                    b.Property<string>("Ethnicity")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Ethnicity")
+                    b.Property<string>("LoginName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NickName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PassWord")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("PersonalSignature")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Phone")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Sex")
@@ -194,9 +190,6 @@ namespace CloudNote.Core.SqlServer.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("UpdateName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UsreName")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
