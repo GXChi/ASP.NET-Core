@@ -1,0 +1,14 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "video.js@7.12.1",
+      "destination": "wwwroot/video.js/"
+    },
+    {
+      "library": "videojs-contrib-hls@5.15.0",
+      "destination": "wwwroot/videojs-contrib-hls/"
+    }
+  ]
+}
