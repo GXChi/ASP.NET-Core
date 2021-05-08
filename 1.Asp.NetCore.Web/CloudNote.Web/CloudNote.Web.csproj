@@ -8,11 +8,10 @@
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="wwwroot\bootstrap\examples\" />
     <Folder Include="wwwroot\custom\js\" />
-    <Folder Include="wwwroot\image\" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\image\logo.jpg" />
+    <None Include="wwwroot\images\logo.jpg" />
   </ItemGroup>
 
   <ItemGroup>

@@ -19,6 +19,191 @@ namespace CloudNote.Core.SqlServer.Migrations
                 .HasAnnotation("ProductVersion", "5.0.3")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("CloudNote.Domain.Entities.Areas.AuthorityEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AuthorityCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AuthorityName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AuthorityType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("CreateID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreateName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("RoleEntityId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UpdateID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("UpdateName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("UserEntityId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleEntityId");
+
+                    b.HasIndex("UserEntityId");
+
+                    b.ToTable("AuthorityEntity");
+                });
+
+            modelBuilder.Entity("CloudNote.Domain.Entities.Areas.PermissionEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("CreateID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreateName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Type")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UpdateID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("UpdateName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Permission");
+                });
+
+            modelBuilder.Entity("CloudNote.Domain.Entities.Areas.RoleEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("CreateID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreateName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RoleCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RoleName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RoleType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UpdateID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("UpdateName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("UserEntityId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserEntityId");
+
+                    b.ToTable("Role");
+                });
+
+            modelBuilder.Entity("CloudNote.Domain.Entities.Areas.UserEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Age")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("CreateID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreateName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Ethnicity")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NickName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PassWord")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PersonalSignature")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Sex")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UpdateID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("UpdateName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UsreName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("User");
+                });
+
             modelBuilder.Entity("CloudNote.Domain.Entities.FolderEntity", b =>
                 {
                     b.Property<Guid>("Id")
@@ -100,11 +285,41 @@ namespace CloudNote.Core.SqlServer.Migrations
                     b.ToTable("Note");
                 });
 
+            modelBuilder.Entity("CloudNote.Domain.Entities.Areas.AuthorityEntity", b =>
+                {
+                    b.HasOne("CloudNote.Domain.Entities.Areas.RoleEntity", null)
+                        .WithMany("Authoritys")
+                        .HasForeignKey("RoleEntityId");
+
+                    b.HasOne("CloudNote.Domain.Entities.Areas.UserEntity", null)
+                        .WithMany("Authoritys")
+                        .HasForeignKey("UserEntityId");
+                });
+
+            modelBuilder.Entity("CloudNote.Domain.Entities.Areas.RoleEntity", b =>
+                {
+                    b.HasOne("CloudNote.Domain.Entities.Areas.UserEntity", null)
+                        .WithMany("Roles")
+                        .HasForeignKey("UserEntityId");
+                });
+
             modelBuilder.Entity("CloudNote.Domain.Entities.FolderEntity", b =>
                 {
                     b.HasOne("CloudNote.Domain.Entities.FolderEntity", null)
                         .WithMany("NextFolder")
                         .HasForeignKey("FolderEntityId");
+                });
+
+            modelBuilder.Entity("CloudNote.Domain.Entities.Areas.RoleEntity", b =>
+                {
+                    b.Navigation("Authoritys");
+                });
+
+            modelBuilder.Entity("CloudNote.Domain.Entities.Areas.UserEntity", b =>
+                {
+                    b.Navigation("Authoritys");
+
+                    b.Navigation("Roles");
                 });
 
             modelBuilder.Entity("CloudNote.Domain.Entities.FolderEntity", b =>

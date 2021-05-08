@@ -8,7 +8,7 @@ namespace MyConsole
     {
         public static void Get()
         {
-            string a = null;
+            string a = "testString";
             a.ToString();
         }
     }

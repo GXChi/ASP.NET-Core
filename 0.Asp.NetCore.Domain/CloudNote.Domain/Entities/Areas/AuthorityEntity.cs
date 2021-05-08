@@ -4,7 +4,7 @@ using System.Text;
 
 namespace CloudNote.Domain.Entities.Areas
 {
-    public class AuthorityEntity
+    public class AuthorityEntity : BaseEntity
     {
         public string AuthorityName { get; set; }
         public string AuthorityCode { get; set; }
