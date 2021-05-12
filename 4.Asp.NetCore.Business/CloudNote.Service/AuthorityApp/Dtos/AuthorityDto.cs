@@ -1,6 +1,8 @@
-﻿namespace CloudNote.Domain.Entities.Areas
+﻿using CloudNote.Domain;
+
+namespace CloudNote.Service.AuthorityApp.Dtos
 {
-    public class AuthorityEntity : BaseEntity
+    public class AuthorityDto : BaseEntity
     {
         public string AuthorityName { get; set; }
         public string AuthorityCode { get; set; }

@@ -1,11 +1,11 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using AutoMapper;
 using CloudNote.Domain.Entities;
 using CloudNote.Domain.IRepositories;
 using CloudNote.Service.NoteApp.Dtos;
-using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Text;
 
 namespace CloudNote.Service.NoteApp
 {
@@ -17,7 +17,7 @@ namespace CloudNote.Service.NoteApp
         {
             _noteRepository = noteRepository;
         }
-
+         
         public NoteDto Insert(NoteEntity entity)
         {
             entity.CreateDate = DateTime.Now;
@@ -43,10 +43,11 @@ namespace CloudNote.Service.NoteApp
             return mapper.Map<NoteDto>(_noteRepository.GetById(id));
         }
 
-        //public List<NoteDto> GetAllList()
-        //{
-        //    return Mapper.Map<List<NoteDto>>(_noteRepository.GetAllList(it=>it.Id!=Guid.Empty).OrderBy(it => it.Content));
-        //}
+        public List<NoteDto> GetAllList()
+        {
+            var mapper = mapperConfig.CreateMapper();
+            return mapper.Map<List<NoteDto>>(_noteRepository.GetAllList(it => it.Id != Guid.Empty).OrderBy(it => it.CreateDate));
+        }
 
         public List<NoteDto> GetAllList(Expression<Func<NoteEntity, bool>> where)
         {

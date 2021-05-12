@@ -1,8 +1,9 @@
 ﻿using System;
+using CloudNote.Domain;
 
-namespace CloudNote.Domain.Entities.Areas
+namespace CloudNote.Service.UserApp.Dtos
 {
-    public class UserEntity : BaseEntity
+    public class UserDto : BaseEntity
     {
         public string UserName { get; set; }
         public string NickName { get; set; }
@@ -18,6 +19,5 @@ namespace CloudNote.Domain.Entities.Areas
         public int LoginTimes { get; set; }
         public bool IsDelete { get; set; }
         public bool IsEnable { get; set; }
-
     }
 }

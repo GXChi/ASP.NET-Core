@@ -1,7 +1,4 @@
-﻿using CloudNote.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using CloudNote.Domain;
 
 namespace CloudNote.Service.NoteApp.Dtos
 {

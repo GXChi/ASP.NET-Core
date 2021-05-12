@@ -1,9 +1,8 @@
-﻿using CloudNote.Domain.Entities;
-using CloudNote.Service.NoteApp.Dtos;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Text;
+using CloudNote.Domain.Entities;
+using CloudNote.Service.NoteApp.Dtos;
 
 namespace CloudNote.Service.NoteApp
 {

@@ -2,7 +2,13 @@ using CloudNote.Core;
 using CloudNote.Core.SqlServer.Repositories;
 using CloudNote.Domain.IRepositories;
 using CloudNote.Service;
+using CloudNote.Service.AuthorityApp;
+using CloudNote.Service.DatumApp;
 using CloudNote.Service.NoteApp;
+using CloudNote.Service.PhotoApp;
+using CloudNote.Service.RoleApp;
+using CloudNote.Service.UserApp;
+using CloudNote.Service.VideoApp;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -36,14 +42,27 @@ namespace CloudNote.Web
             services.AddSession();
             services.AddDbContext<CloudNoteDbContext>(optios =>
              optios.UseSqlServer(Configuration.GetConnectionString("SqlServerString")));
+
             services.AddScoped<INoteRepository, NoteRepository>();
             services.AddScoped<INoteAppService, NoteAppService>();
+
+            services.AddScoped<IVideoRepository, VideoRepository>();
+            services.AddScoped<IVideoAppService, VideoAppService>();
+
+            services.AddScoped<IPhotoRepository, PhotoRepository>();
+            services.AddScoped<IPhotoAppService, PhotoAppService>();
+
+            services.AddScoped<IDatumRepository, DatumRepository>();
+            services.AddScoped<IDatumAppService, DatumAppService>();
+
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserAppService, UserAppService>();
+
             services.AddScoped<IRoleRepository, RoleRepository>();
             services.AddScoped<IRoleAppService, RoleAppService>();
-            services.AddScoped<IPermissionRepository, PermissionRepository>();
-            services.AddScoped<IPermissionAppService, PermissionAppService>();
+
+            services.AddScoped<IAuthorityRepository, AuthorityRepository>();
+            services.AddScoped<IAuthorityAppService, AuthorityAppService>();
           
 
             services.AddControllersWithViews();

@@ -1,6 +1,8 @@
-﻿namespace CloudNote.Domain.Entities.Areas
+﻿using CloudNote.Domain;
+
+namespace CloudNote.Service.RoleApp.Dtos
 {
-    public class RoleEntity : BaseEntity
+    public class RoleDto : BaseEntity
     {
         public string RoleName { get; set; }
         public string RoleCode { get; set; }

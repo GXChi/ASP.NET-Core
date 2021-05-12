@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
+using CloudNote.Domain;
 
-namespace CloudNote.Domain.Entities
+namespace CloudNote.Service.FolderApp.Dtos
 {
-    public class FolderEntity : BaseEntity
+    public class FolderDto : BaseEntity
     {
         public Guid FolderId { get; set; }
         public string Name { get; set; }
