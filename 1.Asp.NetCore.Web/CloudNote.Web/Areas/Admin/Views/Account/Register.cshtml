@@ -6,7 +6,7 @@
     <div class="message" style="font-size: 20px;">账号注册</div>
     <div id="darkbannerwrap"></div>
     <form method="post" class="layui-form">
-        <input type="text" name="entity.Phone" placeholder="手机号" lay-verify="phone" class="layui-input">
+        <input type="text" name="Phone" placeholder="手机号" lay-verify="phone" class="layui-input">
         <div class="layui-row">
             <div class="layui-col-xs7">
                 <input type="text" name="vercode" placeholder="验证码" lay-verify="required" class="layui-input" id="LAY-user-login-vercode">
@@ -17,43 +17,70 @@
                 </div>
             </div>
         </div>
-        <input type="text" name="entity.LoginName" placeholder="用户名" lay-verify="required" class="layui-input">
-        <input type="password" name="entity.PassWord" placeholder="密码" lay-verify="required" class="layui-input">
-        <input type="password" name="repass" placeholder="确认密码"  class="layui-input">
+        <input type="text" name="UserName" placeholder="用户名" lay-verify="required" class="layui-input">
+        <input type="password" name="PassWord" placeholder="密码" lay-verify="required" class="layui-input">
+        <input type="password" name="repass" placeholder="确认密码" class="layui-input">
         <div class="layui-form-item">
             <input type="checkbox" name="agreement" lay-skin="primary" title="同意用户协议" checked=""><div class="layui-unselect layui-form-checkbox layui-form-checked" lay-skin="primary"><span>同意用户协议</span><i class="layui-icon layui-icon-ok"></i></div>
         </div>
         <div class="layui-form-item">
-            <button class="layui-btn layui-btn-fluid" lay-submit="" lay-filter="LAY-user-reg-submit">注 册</button>
+            <button class="layui-btn layui-btn-fluid" lay-submit="" lay-filter="register">注 册</button>
         </div>
-        <div class="layui-trans layui-form-item layadmin-user-login-other">
-            <label>社交账号注册</label>
-            <a href="javascript:;"><i class="layui-icon layui-icon-login-qq"></i></a>
-            <a href="javascript:;"><i class="layui-icon layui-icon-login-wechat"></i></a>
-            <a href="javascript:;"><i class="layui-icon layui-icon-login-weibo"></i></a>
-            <a href="Login" class="layadmin-user-jump-change layadmin-link layui-hide-xs">用已有帐号登入</a>
-        </div>
-    </form>
+    </form>   
+    <div class="layui-trans layui-form-item layadmin-user-login-other">
+        <label>社交账号注册</label>
+        <a href="javascript:;"><i class="layui-icon layui-icon-login-qq"></i></a>
+        <a href="javascript:;"><i class="layui-icon layui-icon-login-wechat"></i></a>
+        <a href="javascript:;"><i class="layui-icon layui-icon-login-weibo"></i></a>
+        <a href="Login" class="layadmin-user-jump-change layadmin-link layui-hide-xs">用已有帐号登入</a>
+    </div>
 </div>
 
 
 <script>
     $(function () {
+
         layui.use('form', function () {
             var form = layui.form;
-            // layer.msg('玩命卖萌中', function(){
-            //   //关闭后的操作
-            //   });
             //监听提交
-            form.on('submit(login)', function (data) {
-                // alert(888)
-                layer.msg(JSON.stringify(data.field), function () {
-                    location.href = 'index.html'
+            form.on('submit(register)', function (data) {
+                var field = data.field;
+
+                //确认密码
+                if (field['PassWord'] !== field['repass']) {
+                    return layer.msg('两次密码输入不一致');
+                }
+
+                //是否同意用户协议
+                if (!field.agreement) {
+                    return layer.msg('你必须同意用户协议才能注册');
+                }
+
+                var url = '@Url.Action("RegisterSave", "Account")';
+         
+                $.ajax({
+                    type: "post",
+                    dataType: "json",
+                    data: field,
+                    url: url,
+                    success: function (message) {
+                        if (message == "") {
+                            layer.msg('注册成功，进入后台管理系统！');
+                            layer.load(1);
+                            location.href = '@Url.Action("Index","Home")';
+                            //window.location = '@Url.Action("Index","Home")';
+                        }
+                        else {
+                            layer.msg(message);
+                            return false;
+                        }
+                    }, error: function (e) {
+                        layer.msg("请求异常，请重试", { shift: 6 })
+                    }
+                })
+                    return false;
                 });
-                return false;
-            });
         });
+
     })
-
-
 </script>

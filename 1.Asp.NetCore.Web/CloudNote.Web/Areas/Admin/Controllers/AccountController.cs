@@ -28,33 +28,57 @@ namespace CloudNote.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public JsonResult LoginSave(UserEntity entity)
+        public JsonResult LoginSave(UserEntity entity, string vercode)
+        {
+            var message = string.Empty;
+            var user = _userAppService.GetAllList(x => x.UserName == entity.UserName);
+            if (user == null || user.Count <= 0)
+            {
+                message = "用户不存在！";
+            }
+            else if (user[0].PassWord != entity.PassWord)
+            {
+                message = "密码错误！";
+            }
+            return Json(message);
+        }
+
+        [HttpPost]
+        public JsonResult RegisterSave(UserEntity entity)
         {
             var message = string.Empty;
             try
             {
-                _userAppService.InsertOrUpdate(entity);
+                if (ModelState.IsValid)
+                {
+                    if (string.IsNullOrWhiteSpace(entity.Id.ToString()))
+                    {
+                        entity.Id = Guid.NewGuid();
+                    }
+                    _userAppService.InsertOrUpdate(entity);
+                }
+
             }
             catch (Exception ex)
             {
                 message = ex.Message;
             }
             return Json(message);
-    }
+        }
 
-    public IActionResult Logout()
-    {
-        return View();
-    }
+        public IActionResult Logout()
+        {
+            return View();
+        }
 
-    public IActionResult Register()
-    {
-        return View();
-    }
+        public IActionResult Register()
+        {
+            return View();
+        }
 
-    public IActionResult RegisterSave()
-    {
-        return View();
+        public IActionResult RegisterSave()
+        {
+            return View();
+        }
     }
-}
 }

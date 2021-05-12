@@ -6,7 +6,7 @@ namespace CloudNote.Domain.Entities.Areas
 {
     public class UserEntity : BaseEntity
     {
-        public string UsreName { get; set; }
+        public string UserName { get; set; }
         public string NickName { get; set; }
         public string PassWord { get; set; }
         public string Sex { get; set; }
@@ -15,7 +15,5 @@ namespace CloudNote.Domain.Entities.Areas
         public string Phone { get; set; }
         public string Email { get; set; }
         public string PersonalSignature { get; set; }
-        public List<RoleEntity> Roles { get; set; }
-        public List<AuthorityEntity> Authoritys { get; set; }
     }
 }

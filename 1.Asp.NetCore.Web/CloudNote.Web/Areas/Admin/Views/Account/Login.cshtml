@@ -6,8 +6,8 @@
     <div class="message" style="font-size: 20px;">用户登录</div>
     <div id="darkbannerwrap"></div>
     <form method="post" class="layui-form">
-        <input name="username" placeholder="用户名" type="text" lay-verify="required" class="layui-input">
-        <input name="password" lay-verify="required" placeholder="密码" type="password" class="layui-input">
+        <input name="UserName" placeholder="用户名" type="text" lay-verify="required" class="layui-input">
+        <input name="PassWord" lay-verify="required" placeholder="密码" type="password" class="layui-input">
         <div class="layui-row">
             <div class="layui-col-xs7">
                 <input type="text" name="vercode" id="LAY-user-login-vercode" lay-verify="required" placeholder="图形验证码" class="layui-input">
@@ -39,21 +39,18 @@
         var form = layui.form;
         //监听提交
         form.on('submit(login)', function (data) {
-            var url = '@Url.Action("LoginSave","Account")';
-            var data = JSON.stringify(data.field);
-            console.log(url);
-            layer.msg(data);
-
+            var url = '@Url.Action("LoginSave", "Account")';
+            //var data = JSON.stringify(data.field);
             $.ajax({
                 type: "post",
                 dataType: "json",
-                data: data,
+                data: data.field,
                 url: url,
                 success: function (message) {
                     if (message == "") {
                         layer.msg('登录成功，进入后台管理系统！');
                         layer.load(1);
-                        window.location = '@Url.Action("Index","Home")';
+                        window.location = '@Url.Action("Index","User")';
                     }
                     else {
                         layer.msg(message);

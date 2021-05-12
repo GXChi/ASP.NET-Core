@@ -10,5 +10,7 @@ namespace CloudNote.Domain.Entities
         public string Label { get; set; }
         public string Type { get; set; }
         public string Content { get; set; }
+        public bool IsCollection { get; set; }
+        public bool IsDelete { get; set; }
     }
 }

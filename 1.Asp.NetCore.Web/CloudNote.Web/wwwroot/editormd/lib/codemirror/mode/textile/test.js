@@ -80,7 +80,7 @@
       'user@example.com');
 
   MT('subBogus',
-      '~username');
+      '~UserName');
 
   MT('supBogus',
       'foo ^ bar');

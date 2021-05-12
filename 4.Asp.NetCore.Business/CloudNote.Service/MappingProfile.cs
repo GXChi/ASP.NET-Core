@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CloudNote.Domain.Entities;
+using CloudNote.Domain.Entities.Areas;
 using CloudNote.Service.NoteApp.Dtos;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,9 @@ namespace CloudNote.Service
         public MappingProfile()
         {
             CreateMap<NoteEntity, NoteDto>();
+            CreateMap<UserEntity, UserDto>();
+            CreateMap<RoleEntity, RoleDto>();
+            CreateMap<PermissionEntity, PermissionDto>();
         }
     }
 }

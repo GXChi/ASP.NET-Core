@@ -3,7 +3,7 @@
   ,"msg": ""
   ,"count": 66
   ,"data": [{
-    "username": "张小三"
+    "UserName": "张小三"
     ,"amount": 18
     ,"province": "浙江"
     ,"city": "杭州"
@@ -12,7 +12,7 @@
     ,"address": "西溪花园"
     ,"house": "30栋1单元"
   }, {
-    "username": "李小四"
+    "UserName": "李小四"
     ,"amount": 39
     ,"province": "江苏"
     ,"city": "苏州"
@@ -21,7 +21,7 @@
     ,"address": "天墅之城"
     ,"house": "9幢2单元"
   }, {
-    "username": "王小四"
+    "UserName": "王小四"
     ,"amount": 8
     ,"province": "江西"
     ,"city": "南昌"
@@ -30,7 +30,7 @@
     ,"address": "中兴和园"
     ,"house": "1幢3单元"
   }, {
-    "username": "赵小六"
+    "UserName": "赵小六"
     ,"amount": 16
     ,"province": "福建"
     ,"city": "泉州"
@@ -39,7 +39,7 @@
     ,"address": "南洋村"
     ,"house": "6幢1单元"
   }, {
-    "username": "孙小七"
+    "UserName": "孙小七"
     ,"amount": 12
     ,"province": "湖北"
     ,"city": "武汉"
@@ -48,7 +48,7 @@
     ,"address": "两湖花园"
     ,"house": "16幢2单元"
   }, {
-    "username": "周小八"
+    "UserName": "周小八"
     ,"amount": 11
     ,"province": "安徽"
     ,"city": "黄山"

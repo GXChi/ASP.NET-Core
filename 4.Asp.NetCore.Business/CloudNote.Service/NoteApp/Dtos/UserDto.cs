@@ -8,7 +8,7 @@ namespace CloudNote.Service.NoteApp.Dtos
 {
     public class UserDto : BaseEntity
     {
-        public string UsreName { get; set; }
+        public string UserName { get; set; }
         public string NickName { get; set; }
         public string PassWord { get; set; }
         public string Sex { get; set; }

@@ -9,6 +9,5 @@ namespace CloudNote.Domain.Entities.Areas
         public string RoleName { get; set; }
         public string RoleCode { get; set; }
         public string RoleType { get; set; }
-        public List<AuthorityEntity> Authoritys { get; set; }
     }
 }
