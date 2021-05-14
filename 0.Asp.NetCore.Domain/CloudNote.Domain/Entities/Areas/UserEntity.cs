@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace CloudNote.Domain.Entities.Areas
 {
@@ -18,6 +19,7 @@ namespace CloudNote.Domain.Entities.Areas
         public int LoginTimes { get; set; }
         public bool IsDelete { get; set; }
         public bool IsEnable { get; set; }
+        public List<UserRoleEntity> UserRoles { get; set; }
 
     }
 }

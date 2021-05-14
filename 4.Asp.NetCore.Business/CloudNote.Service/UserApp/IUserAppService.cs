@@ -8,19 +8,17 @@ namespace CloudNote.Service.UserApp
 {
     public interface IUserAppService
     {
-        UserDto Insert(UserEntity dto);
-
-        List<UserDto> GetAll();
+        UserDto CheckUser(string userName, string passWord);
+        List<UserDto> GetAllList();
 
         List<UserDto> GetAllList(Expression<Func<UserEntity, bool>> where);
 
-        UserDto Get(Guid id);
-
-        void Delete(Guid id);
-
-        UserDto Update(UserEntity entity);
+        UserDto GetUserById(Guid id);
 
         UserDto InsertOrUpdate(UserEntity entity);
+        void Delete(Guid id);
+
+        void DeleteBatch(List<Guid> ids);
 
         //List<UserDto> GetPage(int startPage, int pageSize, out int rowCount, Expression<Func<UserEntity, bool>> where, Expression<Func<UserEntity, object>> order);
 

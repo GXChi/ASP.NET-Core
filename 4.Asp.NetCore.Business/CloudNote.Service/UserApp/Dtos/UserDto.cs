@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using CloudNote.Domain;
+using CloudNote.Domain.Entities.Areas;
 
 namespace CloudNote.Service.UserApp.Dtos
 {
@@ -19,5 +21,6 @@ namespace CloudNote.Service.UserApp.Dtos
         public int LoginTimes { get; set; }
         public bool IsDelete { get; set; }
         public bool IsEnable { get; set; }
+        public List<UserRoleEntity> UserRoles { get; set; }
     }
 }

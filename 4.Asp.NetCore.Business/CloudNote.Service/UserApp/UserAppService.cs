@@ -10,70 +10,54 @@ namespace CloudNote.Service.UserApp
 {
     public class UserAppService : IUserAppService
     {
-        private readonly IUserRepository _UserRepository;
+        private readonly IUserRepository _userRepository;
         MapperConfiguration mapperConfig = MyMapper.Initialize();
+        private readonly IMapper _mapper;
         public UserAppService(IUserRepository UserRepository)
         {
-            _UserRepository = UserRepository;
+            _userRepository = UserRepository;
+            _mapper = mapperConfig.CreateMapper();
         }
 
-        public UserDto Insert(UserEntity entity)
+        public List<UserDto> GetAllList()
         {
-            entity.CreateDate = DateTime.Now;
-            var mapper = mapperConfig.CreateMapper();
-            var User = _UserRepository.Insert(entity);
-            return mapper.Map<UserDto>(User);
+            return _mapper.Map<List<UserDto>>(_userRepository.GetAll());
         }
-        public UserDto Update(UserEntity User)
-        {
-            User.UpdateDate = DateTime.Now;
-            var mapper = mapperConfig.CreateMapper();
-            return mapper.Map<UserDto>(_UserRepository.Update(User));
-        }
-        public List<UserDto> GetAll()
-        {
-            var mapper = mapperConfig.CreateMapper();
-            return mapper.Map<List<UserDto>>(_UserRepository.GetAll());
-        }
-
-        public UserDto Get(Guid id)
-        {
-            var mapper = mapperConfig.CreateMapper();
-            return mapper.Map<UserDto>(_UserRepository.GetById(id));
-        }
-
-        //public List<UserDto> GetAllList()
-        //{
-        //    return Mapper.Map<List<UserDto>>(_UserRepository.GetAllList(it=>it.Id!=Guid.Empty).OrderBy(it => it.Content));
-        //}
 
         public List<UserDto> GetAllList(Expression<Func<UserEntity, bool>> where)
         {
-            var mapper = mapperConfig.CreateMapper();
-            return mapper.Map<List<UserDto>>(_UserRepository.GetAllList(where));
+            return _mapper.Map<List<UserDto>>(_userRepository.GetAllList(where));
         }
+
+        public UserDto GetUserById(Guid id)
+        {
+            return _mapper.Map<UserDto>(_userRepository.GetRolesByUserId(id));
+        }
+
+        public UserDto InsertOrUpdate(UserEntity entity)
+        {
+            return _mapper.Map<UserDto>(_userRepository.InsertOrUpdate(entity));
+        }
+
+        public void DeleteBatch(List<Guid> ids)
+        {
+            _userRepository.Delete(x=>ids.Contains(x.Id));
+        }
+
         public void Delete(Guid id)
         {
-            _UserRepository.Delete(id);
-        }             
-
-        public UserDto InsertOrUpdate(UserEntity User)
-        {
-            var mapper = mapperConfig.CreateMapper();
-            var data = Get(User.Id);
-            if (data != null)
-            {
-                return Update(User);
-            }
-            else
-            {
-                return Insert(User);
-            }
+            _userRepository.Delete(id);
         }
 
+        public UserDto CheckUser(string userName, string passWord)
+        {
+            return _mapper.Map<UserDto>(_userRepository.CheckUser(userName, passWord));
+        }
+
+      
         //public List<UserDto> GetPage(int startPage, int pageSize, out int rowCount, Expression<Func<UserEntity, bool>> where, Expression<Func<UserEntity, object>> order)
         //{
-        //    return Mapper.Map<List<UserDto>>(_UserRepository.LoadPageList(startPage, pageSize, out rowCount, where, order));
+        //    return Mapper.Map<List<UserDto>>(_userRepository.LoadPageList(startPage, pageSize, out rowCount, where, order));
         //}
     }
 }

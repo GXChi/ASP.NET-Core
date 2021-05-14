@@ -45,6 +45,8 @@ namespace CloudNote.Core.SqlServer.Repositories
         /// <returns></returns>
         public TEntity GetById(TPrimaryKey id)
         {
+            var a = _dbContext.Find<TEntity>(id);
+            var b = _dbSet.FirstOrDefault(CreateEqualityExpressionForId(id));
             return _dbSet.FirstOrDefault(CreateEqualityExpressionForId(id));
             //return _dbSet.Find(id);
         }

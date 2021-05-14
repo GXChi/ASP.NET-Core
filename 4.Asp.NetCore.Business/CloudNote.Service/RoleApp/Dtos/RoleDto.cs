@@ -1,4 +1,6 @@
 ﻿using CloudNote.Domain;
+using CloudNote.Domain.Entities.Areas;
+using System.Collections.Generic;
 
 namespace CloudNote.Service.RoleApp.Dtos
 {
@@ -8,5 +10,7 @@ namespace CloudNote.Service.RoleApp.Dtos
         public string RoleCode { get; set; }
         public string RoleType { get; set; }
         public string Description { get; set; }
+
+        public List<RoleAuthorityEntity> UserRoles { get; set; }
     }
 }

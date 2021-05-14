@@ -4,14 +4,16 @@ using CloudNote.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CloudNote.Core.SqlServer.Migrations
 {
     [DbContext(typeof(CloudNoteDbContext))]
-    partial class CloudNoteDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210513025306_20210503003")]
+    partial class _20210503003
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

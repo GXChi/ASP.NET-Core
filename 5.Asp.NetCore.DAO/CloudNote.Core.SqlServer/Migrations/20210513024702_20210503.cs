@@ -2,7 +2,7 @@
 
 namespace CloudNote.Core.SqlServer.Migrations
 {
-    public partial class _20210326 : Migration
+    public partial class _20210503 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

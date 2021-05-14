@@ -14,7 +14,7 @@ namespace CloudNote.Web.Areas.Admin.Controllers
         public IActionResult Index()
         {
             ViewData["Name"] = "用户管理";
-            var list = _userAppService.GetAll();
+            var list = _userAppService.GetAllList();
             return View(list); ;
         }
 
