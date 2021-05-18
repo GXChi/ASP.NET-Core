@@ -16,7 +16,7 @@ namespace CloudNote.Web.Areas.Admin.Controllers
             context.HttpContext.Session.TryGetValue("CurrentUser", out result);
             if (result == null)
             {
-                context.Result = new RedirectResult("/Login/Index");
+                context.Result = new RedirectResult("/Admin/Account");
                 return;
             }
             base.OnActionExecuting(context);

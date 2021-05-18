@@ -28,7 +28,7 @@
             <a href="javascript:;"><i class="layui-icon layui-icon-login-qq"></i></a>
             <a href="javascript:;"><i class="layui-icon layui-icon-login-wechat"></i></a>
             <a href="javascript:;"><i class="layui-icon layui-icon-login-weibo"></i></a>
-            <a href="register" class="layadmin-user-jump-change layadmin-link">注册帐号</a>
+            <a href="RegisterIndex" class="layadmin-user-jump-change layadmin-link">注册帐号</a>
         </div>
     </form>
 </div>
@@ -39,7 +39,7 @@
         var form = layui.form;
         //监听提交
         form.on('submit(login)', function (data) {
-            var url = '@Url.Action("LoginSave", "Account")';
+            var url = '@Url.Action("Login", "Account")';
             //var data = JSON.stringify(data.field);
             $.ajax({
                 type: "post",
@@ -47,6 +47,7 @@
                 data: data.field,
                 url: url,
                 success: function (message) {
+                    console.log(message);
                     if (message == "") {
                         layer.msg('登录成功，进入后台管理系统！');
                         layer.load(1);

@@ -10,19 +10,16 @@ namespace CloudNote.Service.DatumApp
 {
     public interface IDatumAppService
     {
-        DatumDto Insert(DatumEntity dto);
 
-        List<DatumDto> GetAll();
+        List<DatumDto> GetAllList();
 
         List<DatumDto> GetAllList(Expression<Func<DatumEntity, bool>> where);
 
-        DatumDto Get(Guid id);
+        DatumDto GetDatumById(Guid id);
 
         void Delete(Guid id);
 
-        DatumDto Update(DatumEntity entity);
-
-        DatumDto InsertOrUpdate(DatumEntity entity);
+        bool InsertOrUpdate(DatumDto dto);
 
         //List<DatumDto> GetPage(int startPage, int pageSize, out int rowCount, Expression<Func<DatumEntity, bool>> where, Expression<Func<DatumEntity, object>> order);
 

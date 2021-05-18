@@ -32,7 +32,7 @@ namespace CloudNote.Core.SqlServer.Repositories
         /// 获取所有实体
         /// </summary>
         /// <returns></returns>
-        public List<TEntity> GetAll()
+        public List<TEntity> GetAllList()
         {
             return _dbSet.ToList();
             //return _dbContext.Set<TEntity>().ToList();

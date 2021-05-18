@@ -18,7 +18,7 @@ namespace CloudNote.Web.Controllers
         public ActionResult Index()
         {
             ViewData["Name"] = "最新文档";
-            var notes = _noteAppService.GetAll();
+            var notes = _noteAppService.GetAllList();
             return View(notes);
         }
 
@@ -27,7 +27,7 @@ namespace CloudNote.Web.Controllers
             var notes = new NoteDto();
             if (!string.IsNullOrEmpty(noteID.ToString()))
             {
-                notes = _noteAppService.Get(noteID);
+                notes = _noteAppService.GetById(noteID);
             }         
             return Json(notes);
         }
@@ -47,7 +47,7 @@ namespace CloudNote.Web.Controllers
         // POST: NoteController/Create
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public ActionResult Create(NoteEntity entity)
+        public ActionResult Create(NoteDto entity)
         {
             try
             {

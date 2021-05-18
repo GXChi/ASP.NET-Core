@@ -8,19 +8,15 @@ namespace CloudNote.Service.VideoApp
 {
     public interface IVideoAppService
     {
-        VideoDto Insert(VideoEntity dto);
-
-        List<VideoDto> GetAll();
+        List<VideoDto> GetAllList();
 
         List<VideoDto> GetAllList(Expression<Func<VideoEntity, bool>> where);
 
-        VideoDto Get(Guid id);
+        VideoDto GetById(Guid id);
 
         void Delete(Guid id);
 
-        VideoDto Update(VideoEntity entity);
-
-        VideoDto InsertOrUpdate(VideoEntity entity);
+        bool InsertOrUpdate(VideoDto entity);
 
         //List<VideoDto> GetPage(int startPage, int pageSize, out int rowCount, Expression<Func<VideoEntity, bool>> where, Expression<Func<VideoEntity, object>> order);
 

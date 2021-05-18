@@ -11,66 +11,39 @@ namespace CloudNote.Service.FolderApp
 {
     public class FolderAppService : IFolderAppService
     {
-        private readonly IFolderRepository _FolderRepository;
+        private readonly IFolderRepository _folderRepository;
+        private readonly IMapper _mapper;
         MapperConfiguration mapperConfig = MyMapper.Initialize();
+       
         public FolderAppService(IFolderRepository FolderRepository)
         {
-            _FolderRepository = FolderRepository;
+            _folderRepository = FolderRepository;
+            _mapper = mapperConfig.CreateMapper();
         }
 
-        public FolderDto Insert(FolderEntity entity)
-        {
-            entity.CreateDate = DateTime.Now;
-            var mapper = mapperConfig.CreateMapper();
-            var Folder = _FolderRepository.Insert(entity);
-            return mapper.Map<FolderDto>(Folder);
-        }
-        public FolderDto Update(FolderEntity entity)
-        {
-            entity.UpdateDate = DateTime.Now;
-            var mapper = mapperConfig.CreateMapper();
-            return mapper.Map<FolderDto>(_FolderRepository.Update(entity));
-        }
-        public List<FolderDto> GetAll()
-        {
-            var mapper = mapperConfig.CreateMapper();
-            return mapper.Map<List<FolderDto>>(_FolderRepository.GetAll());
-        }
-
-        public FolderDto Get(Guid id)
-        {
-            var mapper = mapperConfig.CreateMapper();
-            return mapper.Map<FolderDto>(_FolderRepository.GetById(id));
+        public FolderDto GetById(Guid id)
+        {          
+            return _mapper.Map<FolderDto>(_folderRepository.GetById(id));
         }
 
         public List<FolderDto> GetAllList()
         {
-            var mapper = mapperConfig.CreateMapper();
-            return mapper.Map<List<FolderDto>>(_FolderRepository.GetAllList(it => it.Id != Guid.Empty).OrderBy(it => it.CreateDate));
+            return _mapper.Map<List<FolderDto>>(_folderRepository.GetAllList());
         }
 
         public List<FolderDto> GetAllList(Expression<Func<FolderEntity, bool>> where)
         {
-            var mapper = mapperConfig.CreateMapper();
-            return mapper.Map<List<FolderDto>>(_FolderRepository.GetAllList(where));
+            return _mapper.Map<List<FolderDto>>(_folderRepository.GetAllList(where));
         }
         public void Delete(Guid id)
         {
-            _FolderRepository.Delete(id);
+            _folderRepository.Delete(id);
         }             
 
-        public FolderDto InsertOrUpdate(FolderEntity Folder)
+        public bool InsertOrUpdate(FolderDto dto)
         {
-            var mapper = mapperConfig.CreateMapper();
-            var data = Get(Folder.Id);
-            if (data != null)
-            {
-                return Update(Folder);
-            }
-            else
-            {
-                return Insert(Folder);
-            }
+            var result = _folderRepository.InsertOrUpdate(_mapper.Map<FolderEntity>(dto));
+            return result == null ? false : true;
         }
 
         //public List<FolderDto> GetPage(int startPage, int pageSize, out int rowCount, Expression<Func<FolderEntity, bool>> where, Expression<Func<FolderEntity, object>> order)

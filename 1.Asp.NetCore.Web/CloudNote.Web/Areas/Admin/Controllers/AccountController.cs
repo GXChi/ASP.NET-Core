@@ -1,7 +1,10 @@
 ﻿using CloudNote.Domain.Entities.Areas;
 using CloudNote.Service.UserApp;
+using CloudNote.Service.UserApp.Dtos;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using Utility.Helper;
 
 namespace CloudNote.Web.Areas.Admin.Controllers
 {
@@ -19,42 +22,45 @@ namespace CloudNote.Web.Areas.Admin.Controllers
             return View();
         }
 
-        public IActionResult Login()
+        [HttpPost]
+        public JsonResult Login(UserEntity entity, string vercode)
+        {
+            var message = string.Empty;
+            if (ModelState.IsValid)
+            {
+                var user = _userAppService.CheckUser(entity.UserName, entity.PassWord);
+                if (user != null)
+                {
+                    //记录Session
+                    HttpContext.Session.SetString("CurrentUserId", user.Id.ToString());
+                    HttpContext.Session.Set("CurrentUser", ByteConvertHelper.ObjectToBytes(user));
+                }
+                else
+                {
+                    message = "用户名或密码错误。";
+                }
+            }
+            return Json(message);
+        }
+
+        public IActionResult RegisterIndex()
         {
             return View();
         }
 
         [HttpPost]
-        public JsonResult LoginSave(UserEntity entity, string vercode)
-        {
-            var message = string.Empty;
-            var user = _userAppService.GetAllList(x => x.UserName == entity.UserName);
-            if (user == null || user.Count <= 0)
-            {
-                message = "用户不存在！";
-            }
-            else if (user[0].PassWord != entity.PassWord)
-            {
-                message = "密码错误！";
-            }
-            return Json(message);
-        }
-
-        [HttpPost]
-        public JsonResult RegisterSave(UserEntity entity)
+        public JsonResult RegisterSave(UserDto entity)
         {
             var message = string.Empty;
             try
             {
                 if (ModelState.IsValid)
                 {
-                    if (string.IsNullOrWhiteSpace(entity.Id.ToString()))
+                    if (!_userAppService.InsertOrUpdate(entity))
                     {
-                        entity.Id = Guid.NewGuid();
+                        message = "注册失败";
                     }
-                    _userAppService.InsertOrUpdate(entity);
                 }
-
             }
             catch (Exception ex)
             {
@@ -65,17 +71,8 @@ namespace CloudNote.Web.Areas.Admin.Controllers
 
         public IActionResult Logout()
         {
-            return View();
+            return View("Account/Index");
         }
 
-        public IActionResult Register()
-        {
-            return View();
-        }
-
-        public IActionResult RegisterSave()
-        {
-            return View();
-        }
     }
 }

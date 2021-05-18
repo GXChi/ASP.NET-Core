@@ -12,66 +12,39 @@ namespace CloudNote.Service.NoteApp
 {
     public class RoleAppService : IRoleAppService
     {
-        private readonly IRoleRepository _RoleRepository;
+        private readonly IRoleRepository _roleRepository;   
+        private readonly IMapper _mapper;
         MapperConfiguration mapperConfig = MyMapper.Initialize();
         public RoleAppService(IRoleRepository RoleRepository)
         {
-            _RoleRepository = RoleRepository;
+            _roleRepository = RoleRepository;
+            _mapper = mapperConfig.CreateMapper();
         }
-
-        public RoleDto Insert(RoleEntity entity)
-        {
-            entity.CreateDate = DateTime.Now;
-            var mapper = mapperConfig.CreateMapper();
-            var Role = _RoleRepository.Insert(entity);
-            return mapper.Map<RoleDto>(Role);
-        }
-        public RoleDto Update(RoleEntity Role)
-        {
-            Role.UpdateDate = DateTime.Now;
-            var mapper = mapperConfig.CreateMapper();
-            return mapper.Map<RoleDto>(_RoleRepository.Update(Role));
-        }
-        public List<RoleDto> GetAll()
-        {
-            var mapper = mapperConfig.CreateMapper();
-            return mapper.Map<List<RoleDto>>(_RoleRepository.GetAll());
-        }
-
-        public RoleDto Get(Guid id)
-        {
-            var mapper = mapperConfig.CreateMapper();
-            return mapper.Map<RoleDto>(_RoleRepository.GetById(id));
+           
+        public RoleDto GetById(Guid id)
+        {        
+            return _mapper.Map<RoleDto>(_roleRepository.GetById(id));
         }
 
         public List<RoleDto> GetAllList()
         {
-            var mapper = mapperConfig.CreateMapper();
-            return mapper.Map<List<RoleDto>>(_RoleRepository.GetAllList(it => it.Id != Guid.Empty).OrderBy(it => it.CreateDate));
+            return _mapper.Map<List<RoleDto>>(_roleRepository.GetAllList());
         }
 
         public List<RoleDto> GetAllList(Expression<Func<RoleEntity, bool>> where)
-        {
-            var mapper = mapperConfig.CreateMapper();
-            return mapper.Map<List<RoleDto>>(_RoleRepository.GetAllList(where));
+        {         
+            return _mapper.Map<List<RoleDto>>(_roleRepository.GetAllList(where));
         }
+
         public void Delete(Guid id)
         {
-            _RoleRepository.Delete(id);
+            _roleRepository.Delete(id);
         }             
 
-        public RoleDto InsertOrUpdate(RoleEntity Role)
+        public bool InsertOrUpdate(RoleDto dto)
         {
-            var mapper = mapperConfig.CreateMapper();
-            var data = Get(Role.Id);
-            if (data != null)
-            {
-                return Update(Role);
-            }
-            else
-            {
-                return Insert(Role);
-            }
+            var result = _roleRepository.InsertOrUpdate(_mapper.Map<RoleEntity>(dto));
+            return result == null ? false : true;
         }
 
         //public List<RoleDto> GetPage(int startPage, int pageSize, out int rowCount, Expression<Func<RoleEntity, bool>> where, Expression<Func<RoleEntity, object>> order)

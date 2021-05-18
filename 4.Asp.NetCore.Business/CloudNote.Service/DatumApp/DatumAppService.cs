@@ -11,66 +11,39 @@ namespace CloudNote.Service.DatumApp
 {
     public class DatumAppService : IDatumAppService
     {
-        private readonly IDatumRepository _DatumRepository;
+        private readonly IDatumRepository _datumRepository;
+        private readonly IMapper _mapper;
         MapperConfiguration mapperConfig = MyMapper.Initialize();
+       
         public DatumAppService(IDatumRepository DatumRepository)
         {
-            _DatumRepository = DatumRepository;
-        }
-
-        public DatumDto Insert(DatumEntity entity)
-        {
-            entity.CreateDate = DateTime.Now;
-            var mapper = mapperConfig.CreateMapper();
-            var Datum = _DatumRepository.Insert(entity);
-            return mapper.Map<DatumDto>(Datum);
-        }
-        public DatumDto Update(DatumEntity Datum)
-        {
-            Datum.UpdateDate = DateTime.Now;
-            var mapper = mapperConfig.CreateMapper();
-            return mapper.Map<DatumDto>(_DatumRepository.Update(Datum));
-        }
-        public List<DatumDto> GetAll()
-        {
-            var mapper = mapperConfig.CreateMapper();
-            return mapper.Map<List<DatumDto>>(_DatumRepository.GetAll());
-        }
-
-        public DatumDto Get(Guid id)
-        {
-            var mapper = mapperConfig.CreateMapper();
-            return mapper.Map<DatumDto>(_DatumRepository.GetById(id));
+            _datumRepository = DatumRepository;
+            _mapper = mapperConfig.CreateMapper();
         }
 
         public List<DatumDto> GetAllList()
         {
-            var mapper = mapperConfig.CreateMapper();
-            return mapper.Map<List<DatumDto>>(_DatumRepository.GetAllList(it => it.Id != Guid.Empty).OrderBy(it => it.CreateDate));
+            return _mapper.Map<List<DatumDto>>(_datumRepository.GetAllList());
+        }
+
+        public DatumDto GetDatumById(Guid id)
+        {
+            return _mapper.Map<DatumDto>(_datumRepository.GetById(id));
         }
 
         public List<DatumDto> GetAllList(Expression<Func<DatumEntity, bool>> where)
         {
-            var mapper = mapperConfig.CreateMapper();
-            return mapper.Map<List<DatumDto>>(_DatumRepository.GetAllList(where));
+            return _mapper.Map<List<DatumDto>>(_datumRepository.GetAllList(where));
         }
         public void Delete(Guid id)
         {
-            _DatumRepository.Delete(id);
-        }             
+            _datumRepository.Delete(id);
+        }
 
-        public DatumDto InsertOrUpdate(DatumEntity Datum)
+        public bool InsertOrUpdate(DatumDto dto)
         {
-            var mapper = mapperConfig.CreateMapper();
-            var data = Get(Datum.Id);
-            if (data != null)
-            {
-                return Update(Datum);
-            }
-            else
-            {
-                return Insert(Datum);
-            }
+            var result = _datumRepository.InsertOrUpdate(_mapper.Map<DatumEntity>(dto));
+            return result == null ? false : true;
         }
 
         //public List<DatumDto> GetPage(int startPage, int pageSize, out int rowCount, Expression<Func<DatumEntity, bool>> where, Expression<Func<DatumEntity, object>> order)

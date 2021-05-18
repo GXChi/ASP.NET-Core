@@ -18,7 +18,7 @@
                     @foreach (var note in Model)
                     {
                         <li class="nav-item" style="        border-bottom: 1px solid #2280ed;height: 50px;">
-                            <a class="nav-link @(note.Id.ToString() == "" ? "":"active")" style="cursor:pointer" onclick="getNoteInfo('@note.Id')">
+                            <a class="nav-link @(note.Id.ToString() == "" ? "" : "active")" style="cursor:pointer" onclick="getNoteInfo('@note.Id')">
                                 @(string.IsNullOrEmpty(note.Title) ? "无标题笔记" : note.Title)
                                 <i class="bi-nut-fill" onclick=""></i>
                             </a>

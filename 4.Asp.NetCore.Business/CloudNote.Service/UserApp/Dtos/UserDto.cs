@@ -17,7 +17,7 @@ namespace CloudNote.Service.UserApp.Dtos
         public string Email { get; set; }
         public string Address { get; set; }
         public string PersonalSignature { get; set; }
-        public DateTime LastLoginTime { get; set; }
+        public DateTime LastLoginDate { get; set; }
         public int LoginTimes { get; set; }
         public bool IsDelete { get; set; }
         public bool IsEnable { get; set; }

@@ -6,71 +6,48 @@ using CloudNote.Domain.Entities.Areas;
 using CloudNote.Domain.IRepositories;
 using CloudNote.Service.NoteApp;
 using CloudNote.Service.AuthorityApp.Dtos;
+using System.Linq;
 
 namespace CloudNote.Service.AuthorityApp
 {
     public class AuthorityAppService : IAuthorityAppService
     {
-        private readonly IAuthorityRepository _AuthorityRepository;
+        private readonly IAuthorityRepository _authorityRepository;
+        private readonly IMapper _mapper;
         MapperConfiguration mapperConfig = MyMapper.Initialize();
+     
         public AuthorityAppService(IAuthorityRepository AuthorityRepository)
         {
-            _AuthorityRepository = AuthorityRepository;
+            _authorityRepository = AuthorityRepository;
+            _mapper = mapperConfig.CreateMapper();
         }
 
-        public AuthorityDto Insert(AuthorityEntity entity)
+        public AuthorityDto GetList(Guid id)
         {
-            entity.CreateDate = DateTime.Now;
-            var mapper = mapperConfig.CreateMapper();
-            var Authority = _AuthorityRepository.Insert(entity);
-            return mapper.Map<AuthorityDto>(Authority);
-        }
-        public AuthorityDto Update(AuthorityEntity Authority)
-        {
-            Authority.UpdateDate = DateTime.Now;
-            var mapper = mapperConfig.CreateMapper();
-            return mapper.Map<AuthorityDto>(_AuthorityRepository.Update(Authority));
-        }
-        public List<AuthorityDto> GetAll()
-        {
-            var mapper = mapperConfig.CreateMapper();
-            return mapper.Map<List<AuthorityDto>>(_AuthorityRepository.GetAll());
+            return _mapper.Map<AuthorityDto>(_authorityRepository.GetById(id));
         }
 
-        public AuthorityDto Get(Guid id)
+        public List<AuthorityDto> GetAllList()
         {
-            var mapper = mapperConfig.CreateMapper();
-            return mapper.Map<AuthorityDto>(_AuthorityRepository.GetById(id));
+            return _mapper.Map<List<AuthorityDto>>(_authorityRepository.GetAllList());
         }
-
-        //public List<AuthorityDto> GetAllList()
-        //{
-        //    return Mapper.Map<List<AuthorityDto>>(_AuthorityRepository.GetAllList(it=>it.Id!=Guid.Empty).OrderBy(it => it.Content));
-        //}
 
         public List<AuthorityDto> GetAllList(Expression<Func<AuthorityEntity, bool>> where)
-        {
-            var mapper = mapperConfig.CreateMapper();
-            return mapper.Map<List<AuthorityDto>>(_AuthorityRepository.GetAllList(where));
+        {          
+            return _mapper.Map<List<AuthorityDto>>(_authorityRepository.GetAllList(where));
         }
+
         public void Delete(Guid id)
         {
-            _AuthorityRepository.Delete(id);
-        }             
-
-        public AuthorityDto InsertOrUpdate(AuthorityEntity Authority)
-        {
-            var mapper = mapperConfig.CreateMapper();
-            var data = Get(Authority.Id);
-            if (data != null)
-            {
-                return Update(Authority);
-            }
-            else
-            {
-                return Insert(Authority);
-            }
+            _authorityRepository.Delete(id);
         }
+
+        public bool InsertOrUpdate(AuthorityDto dto)
+        {
+            var result = _authorityRepository.InsertOrUpdate(_mapper.Map<AuthorityEntity>(dto));
+            return result == null ? false : true;
+        }
+
 
         //public List<AuthorityDto> GetPage(int startPage, int pageSize, out int rowCount, Expression<Func<AuthorityEntity, bool>> where, Expression<Func<AuthorityEntity, object>> order)
         //{

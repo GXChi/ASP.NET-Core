@@ -9,13 +9,15 @@ namespace CloudNote.Service.UserApp
     public interface IUserAppService
     {
         UserDto CheckUser(string userName, string passWord);
+
         List<UserDto> GetAllList();
 
         List<UserDto> GetAllList(Expression<Func<UserEntity, bool>> where);
 
         UserDto GetUserById(Guid id);
 
-        UserDto InsertOrUpdate(UserEntity entity);
+        bool InsertOrUpdate(UserDto entity);
+
         void Delete(Guid id);
 
         void DeleteBatch(List<Guid> ids);

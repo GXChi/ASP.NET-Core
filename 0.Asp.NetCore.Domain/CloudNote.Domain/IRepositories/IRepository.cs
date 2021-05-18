@@ -27,7 +27,7 @@ namespace CloudNote.Domain.IRepositories
         /// 获取实体集合
         /// </summary>
         /// <returns></returns>
-        List<TEntity> GetAll();
+        List<TEntity> GetAllList();
 
         /// <summary>
         /// 根据id获取实体

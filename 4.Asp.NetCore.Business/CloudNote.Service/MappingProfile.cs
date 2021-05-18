@@ -23,6 +23,7 @@ namespace CloudNote.Service
             CreateMap<PhotoEntity, PhotoDto>();
             CreateMap<DatumEntity, DatumDto>(); 
             CreateMap<UserEntity, UserDto>();
+            CreateMap<UserDto, UserEntity > ();
             CreateMap<UserRoleEntity, UserRoleDto>();
             CreateMap<RoleEntity, RoleDto>();
             CreateMap<RoleAuthorityEntity, RoleAuthorityDto>();

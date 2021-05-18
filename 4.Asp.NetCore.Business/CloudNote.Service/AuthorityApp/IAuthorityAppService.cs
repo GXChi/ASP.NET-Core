@@ -8,19 +8,15 @@ namespace CloudNote.Service.NoteApp
 {
     public interface IAuthorityAppService
     {
-        AuthorityDto Insert(AuthorityEntity dto);
-
-        List<AuthorityDto> GetAll();
+        List<AuthorityDto> GetAllList();
 
         List<AuthorityDto> GetAllList(Expression<Func<AuthorityEntity, bool>> where);
 
-        AuthorityDto Get(Guid id);
+        AuthorityDto GetList(Guid id);
 
         void Delete(Guid id);
 
-        AuthorityDto Update(AuthorityEntity entity);
-
-        AuthorityDto InsertOrUpdate(AuthorityEntity entity);
+        bool InsertOrUpdate(AuthorityDto entity);
 
         //List<AuthorityDto> GetPage(int startPage, int pageSize, out int rowCount, Expression<Func<AuthorityEntity, bool>> where, Expression<Func<AuthorityEntity, object>> order);
 

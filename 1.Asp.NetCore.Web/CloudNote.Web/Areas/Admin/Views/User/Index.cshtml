@@ -1,9 +1,10 @@
 ﻿@model List<CloudNote.Service.UserApp.Dtos.UserDto>
 
 <script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/layui/dist/layui.js"></script>
 <div class="layui-card">
     <div class="layui-card-header">
-        11
+        111
     </div>
     <div class="layui-card-body">
         <table class="layui-table">
@@ -19,7 +20,7 @@
                     <th>邮箱</th>
                     <th>地址</th>
                     <th>加入时间</th>
-                    @*<th>状态</th>*@
+                    <th>状态</th>
                     <th>操作</th>
                 </tr>
             </thead>
@@ -39,11 +40,11 @@
                             <td>@item.Sex</td>
                             <td>@item.Phone</td>
                             <td>@item.Email</td>
-                            <td>北京市 海淀区</td>
+                            <td>@item.Address</td>
                             <td>@item.CreateDate</td>
-                            @*<td class="td-status">
+                            <td class="td-status">
                                 <span class="layui-btn layui-btn-normal layui-btn-mini">已启用</span>
-                            </td>*@
+                            </td>
                             <td class="td-manage">
                                 <a onclick="member_stop(this,'10001')" href="javascript:;" title="启用">
                                     <i class="layui-icon">&#xe601;</i>
@@ -66,44 +67,250 @@
     </div>
 </div>
 <script src="~/layui/xadmin.js"></script>
+
+
+<script type="text/html" id="toolbar">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
+        <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button>
+        <button class="layui-btn layui-btn-sm" lay-event="getData">获取当前页所有数据</button>
+        <button class="layui-btn layui-btn-sm" lay-event="isAll">验证是否全选</button>
+        <button class="layui-btn layui-btn-sm" lay-event="reload">重载（保留初始参数）</button>
+        <button class="layui-btn layui-btn-sm" lay-event="reload2">重载（不保留初始参数）</button>
+        <button class="layui-btn layui-btn-sm" id="dropdown">
+            更多菜单
+            <i class="layui-icon layui-icon-down layui-font-12"></i>
+        </button>
+    </div>
+</script>
+
+<div class="layui-card">
+    <div class="layui-card-body">
+        <table id="test" lay-filter="test"></table>
+    </div>
+</div>
+
+<script type="text/html" id="barOperation">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
 <script>
-    layui.use('laydate', function () {
-        var laydate = layui.laydate;
+    layui.use(['table', 'dropdown'], function () {
+        var table = layui.table
+            , $ = layui.$
+            , laytpl = layui.laytpl
+            , dropdown = layui.dropdown;
 
-        //执行一个laydate实例
-        laydate.render({
-            elem: '#start' //指定元素
+        //全局设定某参数
+        table.set({
+            where: {
+                token: '默认 token 参数'
+            }
+            //,defaultToolbar: ['filter']
+            , limit: 30
+            //,url: 'list'
+            //,height: 300
         });
 
-        //执行一个laydate实例
-        laydate.render({
-            elem: '#end' //指定元素
-        });
-    });
+        //渲染
+        window.ins1 = table.render({
+            elem: '#test'
+            , height: 400
+            //,width: 600
+            , title: '用户数据表'
+            , url: 'User/Index'
+            , method: 'Post'
+            //,size: 'lg'
+            , page: {
 
-    /*用户-停用*/
-    function member_stop(obj, id) {
-        layer.confirm('确认要停用吗？', function (index) {
-
-            if ($(obj).attr('title') == '启用') {
-
-                //发异步把用户状态进行更改
-                $(obj).attr('title', '停用')
-                $(obj).find('i').html('&#xe62f;');
-
-                $(obj).parents("tr").find(".td-status").find('span').addClass('layui-btn-disabled').html('已停用');
-                layer.msg('已停用!', { icon: 5, time: 1000 });
-
-            } else {
-                $(obj).attr('title', '启用')
-                $(obj).find('i').html('&#xe601;');
-
-                $(obj).parents("tr").find(".td-status").find('span').removeClass('layui-btn-disabled').html('已启用');
-                layer.msg('已启用!', { icon: 5, time: 1000 });
             }
 
+            //,autoSort: false //是否自动排序。如果否，则由服务端排序
+            //,loading: false
+            , totalRow: true
+            , limit: 30
+            , toolbar: '#toolbar'
+            , defaultToolbar: ['filter', 'exports', 'print', {
+                title: '帮助'
+                , layEvent: 'LAYTABLE_TIPS'
+                , icon: 'layui-icon-tips'
+            }]
+            , cols: [[
+                { type: 'checkbox', fixed: 'left' }
+                , { field: 'id', title: 'ID', width: 80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计：' }
+                , { field: 'username', title: '用户名', width: 120, edit: 'text', templet: '#usernameTpl' }
+                , { field: 'sex', title: '性别', width: 80, edit: 'text', sort: true }
+                , { field: 'phone', title: '手机', width: 120, templet: '#cityTpl1' }
+                , {
+                    field: 'email', title: '邮箱', hide: 0, width: 150, edit: 'text', templet: function (d) {
+                        console.log(d);
+                        return '<em>' + d.email + '</em>'
+                    }
+                }
+                , { field: 'address', title: '地址', width: 120, templet: '#cityTpl1' }
+                , { field: 'personalsignature', title: '签名' }
+                , { field: 'experience', title: '积分', width: 80, sort: true, totalRow: '{{ d.TOTAL_NUMS }} 分', templet: '<div>{{ d.experience }} 分</div>' }
+                , { field: 'logintimes', title: '登入次数', width: 100, sort: true, totalRow: true }
+                , { field: 'createdate', title: '加入时间', width: 120 }
+                , { field: 'lastlogindate', title: '最后登录时间', width: 120 }
+                , { field: 'isenable', title: '状态', width: 120 }
+                , { fixed: 'right', title: '操作', toolbar: '#barOperation', width: 150 }
+            ]]
+
+            , initSort1: {
+                field: 'experience' //排序字段，对应 cols 设定的各字段名
+                , type: 'desc' //排序方式  asc: 升序、desc: 降序、null: 默认排序
+            }
+
+            , headers: { headers_token: 'sasasas' }
+            , where: {
+                test: '初始 test 参数'
+                , token: '初始 token'
+                , key: 'experience'
+                , order: 'asc'
+            }
+
+            , done: function () {
+                //下拉菜单
+                dropdown.render({
+                    elem: '#dropdown' //可绑定在任意元素中，此处以上述按钮为例
+                    , data: [{
+                        id: 0,
+                        title: '刷新'
+                    }]
+                    //菜单被点击的事件
+                    , click: function (obj) {
+                        table.reload('test');
+                    }
+                });
+            }
+
+            , error: function (res, msg) {
+                console.log(res, msg)
+            }
+
+            /*
+            ,response: {
+              statusName: 'status'
+              ,statusCode: 200
+            }
+            ,parseData: function(res){
+              return {
+                "status": res.status
+                ,"msg": res.message
+                ,"count": res.total
+                ,"data": res.data.list
+              };
+            }
+            */
         });
-    }
+
+        //工具栏事件
+        table.on('toolbar(test)', function (obj) {
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch (obj.event) {
+                case 'add':
+                    layer.msg('添加');
+                    break;
+                case 'update':
+                    layer.msg('编辑');
+                    break;
+                case 'delete':
+                    layer.msg('删除');
+                    break;
+                case 'getCheckData':
+                    var data = checkStatus.data;
+                    layer.alert(JSON.stringify(data));
+                    break;
+                case 'getCheckLength':
+                    var data = checkStatus.data;
+                    layer.msg('选中了：' + data.length + ' 个');
+                    break;
+                case 'getData':
+                    var getData = table.getData(obj.config.id);
+                    console.log(getData);
+                    layer.alert(JSON.stringify(getData));
+                    break;
+                case 'isAll':
+                    layer.msg(checkStatus.isAll ? '全选' : '未全选')
+                    break;
+                case 'LAYTABLE_TIPS':
+                    layer.alert('Table for layui-v' + layui.v);
+                    break;
+                case 'reload':
+                    //深度重载
+                    var instReload = table.reload('test', {
+
+                        where: {
+                            abc: 123
+                            , test: '新的 test1'
+                        }
+                        , page: { curr: 5, limit: 20 }
+                        , cols: ins1.config.cols
+                        //,height: 300
+                        //,url: 'x'
+                    }, true);
+                    break;
+                case 'reload2':
+                    //浅重载
+                    table.reload('test', {
+                        where: {
+                            efg: 'sasasas'
+                            //,test: '新的 test2'
+                            //,token: '新的 token2'
+                        }
+                        , cols: [[
+                            { type: 'checkbox', fixed: 'left' }
+                            , { field: 'id', title: 'ID', width: 80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计：' }
+                            , { field: 'sex', title: '性别', width: 80, edit: 'text', sort: true }
+                            , { field: 'experience', title: '积分', width: 80, sort: true, totalRow: true, templet: '<div>{{ d.experience }} 分</div>' }
+                            , { field: 'logins', title: '登入次数', width: 100, sort: true, totalRow: true }
+                            , { field: 'joinTime', title: '加入时间', width: 120 }
+                        ]]
+                        //,height: 500
+                    });
+                    break;
+            };
+        });
+    })
+    //layui.use('laydate', function () {
+    //    var laydate = layui.laydate;
+
+    //    //执行一个laydate实例
+    //    laydate.render({
+    //        elem: '#start' //指定元素
+    //    });
+
+    //    //执行一个laydate实例
+    //    laydate.render({
+    //        elem: '#end' //指定元素
+    //    });
+    //});
+
+    /*用户-停用*/
+    //function member_stop(obj, id) {
+    //    layer.confirm('确认要停用吗？', function (index) {
+
+    //        if ($(obj).attr('title') == '启用') {
+
+    //            //发异步把用户状态进行更改
+    //            $(obj).attr('title', '停用')
+    //            $(obj).find('i').html('&#xe62f;');
+
+    //            $(obj).parents("tr").find(".td-status").find('span').addClass('layui-btn-disabled').html('已停用');
+    //            layer.msg('已停用!', { icon: 5, time: 1000 });
+
+    //        } else {
+    //            $(obj).attr('title', '启用')
+    //            $(obj).find('i').html('&#xe601;');
+
+    //            $(obj).parents("tr").find(".td-status").find('span').removeClass('layui-btn-disabled').html('已启用');
+    //            layer.msg('已启用!', { icon: 5, time: 1000 });
+    //        }
+
+    //    });
+    //}
 
     /*用户-删除*/
     function member_del(obj, id) {

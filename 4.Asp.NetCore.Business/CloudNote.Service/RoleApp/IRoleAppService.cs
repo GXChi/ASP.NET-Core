@@ -8,19 +8,15 @@ namespace CloudNote.Service.RoleApp
 {
     public interface IRoleAppService
     {
-        RoleDto Insert(RoleEntity dto);
-
-        List<RoleDto> GetAll();
+        List<RoleDto> GetAllList();
 
         List<RoleDto> GetAllList(Expression<Func<RoleEntity, bool>> where);
 
-        RoleDto Get(Guid id);
+        RoleDto GetById(Guid id);
 
         void Delete(Guid id);
 
-        RoleDto Update(RoleEntity entity);
-
-        RoleDto InsertOrUpdate(RoleEntity entity);
+        bool InsertOrUpdate(RoleDto entity);
 
         //List<RoleDto> GetPage(int startPage, int pageSize, out int rowCount, Expression<Func<RoleEntity, bool>> where, Expression<Func<RoleEntity, object>> order);
 

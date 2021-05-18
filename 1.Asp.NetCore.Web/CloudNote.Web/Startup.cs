@@ -63,7 +63,6 @@ namespace CloudNote.Web
 
             services.AddScoped<IAuthorityRepository, AuthorityRepository>();
             services.AddScoped<IAuthorityAppService, AuthorityAppService>();
-          
 
             services.AddControllersWithViews();
             services.AddRazorPages().AddRazorRuntimeCompilation();
@@ -85,6 +84,7 @@ namespace CloudNote.Web
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
+            app.UseSession();
             app.UseRouting();
 
             app.UseAuthorization();

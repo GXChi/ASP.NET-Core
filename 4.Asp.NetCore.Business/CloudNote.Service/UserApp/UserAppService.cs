@@ -11,8 +11,9 @@ namespace CloudNote.Service.UserApp
     public class UserAppService : IUserAppService
     {
         private readonly IUserRepository _userRepository;
-        MapperConfiguration mapperConfig = MyMapper.Initialize();
         private readonly IMapper _mapper;
+        MapperConfiguration mapperConfig = MyMapper.Initialize();
+       
         public UserAppService(IUserRepository UserRepository)
         {
             _userRepository = UserRepository;
@@ -21,7 +22,7 @@ namespace CloudNote.Service.UserApp
 
         public List<UserDto> GetAllList()
         {
-            return _mapper.Map<List<UserDto>>(_userRepository.GetAll());
+            return _mapper.Map<List<UserDto>>(_userRepository.GetAllList());
         }
 
         public List<UserDto> GetAllList(Expression<Func<UserEntity, bool>> where)
@@ -34,9 +35,10 @@ namespace CloudNote.Service.UserApp
             return _mapper.Map<UserDto>(_userRepository.GetRolesByUserId(id));
         }
 
-        public UserDto InsertOrUpdate(UserEntity entity)
+        public bool InsertOrUpdate(UserDto entity)
         {
-            return _mapper.Map<UserDto>(_userRepository.InsertOrUpdate(entity));
+            var user = _userRepository.InsertOrUpdate(_mapper.Map<UserEntity>(entity));
+            return user == null ? false : true;
         }
 
         public void DeleteBatch(List<Guid> ids)
