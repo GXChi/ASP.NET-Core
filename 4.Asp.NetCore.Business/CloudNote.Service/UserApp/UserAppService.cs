@@ -20,9 +20,9 @@ namespace CloudNote.Service.UserApp
             _mapper = mapperConfig.CreateMapper();
         }
 
-        public List<UserDto> GetAllList()
+        public List<UserDto> GetAllList(int startPage, int pageSize,out int rowCount, Expression<Func<UserEntity, bool>> where, Expression<Func<UserEntity, object>> order)
         {
-            return _mapper.Map<List<UserDto>>(_userRepository.GetAllList());
+            return _mapper.Map<List<UserDto>>(_userRepository.LoadPageList(startPage, pageSize, out rowCount, where, order));
         }
 
         public List<UserDto> GetAllList(Expression<Func<UserEntity, bool>> where)

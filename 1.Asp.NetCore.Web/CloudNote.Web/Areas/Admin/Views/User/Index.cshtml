@@ -1,76 +1,9 @@
 ﻿@model List<CloudNote.Service.UserApp.Dtos.UserDto>
-
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script src="~/layui/dist/layui.js"></script>
-<div class="layui-card">
-    <div class="layui-card-header">
-        111
-    </div>
-    <div class="layui-card-body">
-        <table class="layui-table">
-            <thead>
-                <tr>
-                    <th>
-                        <div class="layui-unselect header layui-form-checkbox" lay-skin="primary"><i class="layui-icon">&#xe605;</i></div>
-                    </th>
-                    <th>ID</th>
-                    <th>用户名</th>
-                    <th>性别</th>
-                    <th>手机</th>
-                    <th>邮箱</th>
-                    <th>地址</th>
-                    <th>加入时间</th>
-                    <th>状态</th>
-                    <th>操作</th>
-                </tr>
-            </thead>
-            <tbody>
-                @{
-
-                    int count = 0;
-                    foreach (var item in Model)
-                    {
-                        count++;
-                        <tr>
-                            <td>
-                                <div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id='2'><i class="layui-icon">&#xe605;</i></div>
-                            </td>
-                            <td>@count</td>
-                            <td>@item.UserName</td>
-                            <td>@item.Sex</td>
-                            <td>@item.Phone</td>
-                            <td>@item.Email</td>
-                            <td>@item.Address</td>
-                            <td>@item.CreateDate</td>
-                            <td class="td-status">
-                                <span class="layui-btn layui-btn-normal layui-btn-mini">已启用</span>
-                            </td>
-                            <td class="td-manage">
-                                <a onclick="member_stop(this,'10001')" href="javascript:;" title="启用">
-                                    <i class="layui-icon">&#xe601;</i>
-                                </a>
-                                <a title="编辑" onclick="x_admin_show('编辑','member-edit.html',600,400)" href="javascript:;">
-                                    <i class="layui-icon">&#xe642;</i>
-                                </a>
-                                <a onclick="x_admin_show('修改密码','member-password.html',600,400)" title="修改密码" href="javascript:;">
-                                    <i class="layui-icon">&#xe631;</i>
-                                </a>
-                                <a title="删除" onclick="member_del(this,'要删除的id')" href="javascript:;">
-                                    <i class="layui-icon">&#xe640;</i>
-                                </a>
-                            </td>
-                        </tr>
-                    }
-                }
-            </tbody>
-        </table>
-    </div>
-</div>
-<script src="~/layui/xadmin.js"></script>
-
-
 <script type="text/html" id="toolbar">
     <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="add">新增</button>
         <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
         <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button>
         <button class="layui-btn layui-btn-sm" lay-event="getData">获取当前页所有数据</button>
@@ -96,40 +29,54 @@
 </script>
 
 <script>
+    var table;
     layui.use(['table', 'dropdown'], function () {
-        var table = layui.table
+        layer.closeAll();
+        table = layui.table
             , $ = layui.$
             , laytpl = layui.laytpl
             , dropdown = layui.dropdown;
 
         //全局设定某参数
-        table.set({
-            where: {
-                token: '默认 token 参数'
-            }
-            //,defaultToolbar: ['filter']
-            , limit: 30
-            //,url: 'list'
-            //,height: 300
-        });
+        //table.set({
+        //    where: {
+        //        token: '默认 token 参数'
+        //    }
+        //    //,defaultToolbar: ['filter']
+        //    , limit: 30
+        //    //,url: 'list'
+        //    ,height: 900
+        //});
 
         //渲染
-        window.ins1 = table.render({
+        window.ins = table.render({
             elem: '#test'
-            , height: 400
+            , limit: 10
+            //, height: 860
             //,width: 600
             , title: '用户数据表'
             , url: 'User/Index'
             , method: 'Post'
+            , request: {
+                pageName: 'curr' //页码的参数名称，默认：page
+                , limitName: 'nums' //每页数据量的参数名，默认：limit
+            }
+            , parseData: function (res) { //把数据转换为指定格式code,msg,count,data //res 即为原始返回的数据
+                return {
+                    "code": res.code, //解析接口状态
+                    "msg": res.msg, //解析提示文本
+                    "count": res.count, //解析数据长度
+                    "data": res.data //解析数据列表
+                };
+            }
             //,size: 'lg'
             , page: {
 
             }
-
             //,autoSort: false //是否自动排序。如果否，则由服务端排序
             //,loading: false
             , totalRow: true
-            , limit: 30
+            , limit: 20
             , toolbar: '#toolbar'
             , defaultToolbar: ['filter', 'exports', 'print', {
                 title: '帮助'
@@ -138,10 +85,13 @@
             }]
             , cols: [[
                 { type: 'checkbox', fixed: 'left' }
-                , { field: 'id', title: 'ID', width: 80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计：' }
-                , { field: 'username', title: '用户名', width: 120, edit: 'text', templet: '#usernameTpl' }
+                , { field: 'xuhao', title: '序号', type: 'numbers'}
+                //, { field: 'id', title: 'ID', width: 80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计：' }
+                , { field: 'userName', title: '用户名', width: 120, edit: 'text', templet: '#usernameTpl' }
+                , { field: 'nickName', title: '用户名', width: 120, edit: 'text', templet: '#usernameTpl' }
                 , { field: 'sex', title: '性别', width: 80, edit: 'text', sort: true }
                 , { field: 'phone', title: '手机', width: 120, templet: '#cityTpl1' }
+
                 , {
                     field: 'email', title: '邮箱', hide: 0, width: 150, edit: 'text', templet: function (d) {
                         console.log(d);
@@ -149,13 +99,13 @@
                     }
                 }
                 , { field: 'address', title: '地址', width: 120, templet: '#cityTpl1' }
-                , { field: 'personalsignature', title: '签名' }
+                , { field: 'personalSignature', title: '签名' }
                 , { field: 'experience', title: '积分', width: 80, sort: true, totalRow: '{{ d.TOTAL_NUMS }} 分', templet: '<div>{{ d.experience }} 分</div>' }
-                , { field: 'logintimes', title: '登入次数', width: 100, sort: true, totalRow: true }
-                , { field: 'createdate', title: '加入时间', width: 120 }
-                , { field: 'lastlogindate', title: '最后登录时间', width: 120 }
-                , { field: 'isenable', title: '状态', width: 120 }
-                , { fixed: 'right', title: '操作', toolbar: '#barOperation', width: 150 }
+                , { field: 'loginTimes', title: '登入次数', width: 100, sort: true, totalRow: true }
+                , { field: 'createDate', title: '加入时间', width: 120 }
+                , { field: 'lastloginDate', title: '最后登录时间', width: 120 }
+                , { field: 'isEnable', title: '状态', width: 120 }
+                , { /*field: 'id',*/ fixed: 'right', title: '操作', toolbar: '#barOperation', width: 150 }
             ]]
 
             , initSort1: {
@@ -208,10 +158,18 @@
 
         //工具栏事件
         table.on('toolbar(test)', function (obj) {
+            console.log(obj);
             var checkStatus = table.checkStatus(obj.config.id);
             switch (obj.event) {
                 case 'add':
                     layer.msg('添加');
+                    layer.open({
+                        type: 2,
+                        title: '用户信息编辑',
+                        area: ['850px', '600px'],
+                        content: 'User/Edit',
+
+                    })
                     break;
                 case 'update':
                     layer.msg('编辑');
@@ -273,6 +231,56 @@
                     break;
             };
         });
+
+        table.on('tool(test)', function (obj) {
+            var data = obj.data;
+            console.log(data);
+            if (obj.event === 'del') {
+                layer.confirm('真的删除行么', function (index) {
+
+
+                    //向服务端发送删除指令
+                    $.ajax({
+                        type: "post",
+                        dataType: "json",
+                        data: data.field,
+                        url: '@Url.Action("Delete", "User")?id=' + data.id,
+                        success: function (message) {
+                            if (message == "") {
+                                obj.del();
+                                layer.close(index);
+                                layer.msg('删除成功');
+                                @*location.location = '@Url.Action("Index","Home")';*@
+                            }
+                            else {
+                                layer.msg(message);
+                                return false;
+                            }
+                        }, error: function (e) {
+                            layer.msg("请求异常，请重试", { shift: 6 })
+                        }
+                    })
+
+                });
+            } else if (obj.event === 'edit') {
+                //layer.prompt({
+                //    formType: 2
+                //    , value: data.email
+                //}, function (value, index) {
+                //    obj.update({
+                //        email: value
+                //    });
+                //    layer.close(index);
+                //});
+                layer.open({
+                    type: 2,
+                    title: '用户信息编辑',
+                    area: ['850px', '600px'],
+                    content: 'User/Edit?id=' + data.id,
+
+                })
+            }
+        });
     })
     //layui.use('laydate', function () {
     //    var laydate = layui.laydate;
@@ -312,23 +320,9 @@
     //    });
     //}
 
-    /*用户-删除*/
-    function member_del(obj, id) {
-        layer.confirm('确认要删除吗？', function (index) {
-            //发异步删除数据
-            $(obj).parents("tr").remove();
-            layer.msg('已删除!', { icon: 1, time: 1000 });
-        });
-    }
-
-    function delAll(argument) {
-
-        var data = tableCheck.getData();
-
-        layer.confirm('确认要删除吗？' + data, function (index) {
-            //捉到所有被选中的，发异步进行删除
-            layer.msg('删除成功', { icon: 1 });
-            $(".layui-form-checked").not('.header').parents('tr').remove();
-        });
+    function reload() {
+        var index = layer.load(1);
+        layer.close(index);
+        table.reload('test');
     }
 </script>

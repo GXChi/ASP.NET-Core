@@ -6,17 +6,15 @@ using System.Linq.Expressions;
 
 namespace CloudNote.Service.UserApp
 {
-    public interface IUserAppService
+    public interface IUserRoleAppService
     {
-        UserDto CheckUser(string userName, string passWord);
+        public List<UserRoleDto> GetAllList(int startPage, int pageSize, out int rowCount, Expression<Func<UserEntity, bool>> where, Expression<Func<UserEntity, object>> order);
 
-        public List<UserDto> GetAllList(int startPage, int pageSize, out int rowCount, Expression<Func<UserEntity, bool>> where, Expression<Func<UserEntity, object>> order);
+        List<UserRoleDto> GetAllList(Expression<Func<UserEntity, bool>> where);
 
-        List<UserDto> GetAllList(Expression<Func<UserEntity, bool>> where);
+        UserRoleDto GetUserById(Guid id);
 
-        UserDto GetUserById(Guid id);
-
-        bool InsertOrUpdate(UserDto entity);
+        bool InsertOrUpdate(UserRoleDto entity);
 
         void Delete(Guid id);
 

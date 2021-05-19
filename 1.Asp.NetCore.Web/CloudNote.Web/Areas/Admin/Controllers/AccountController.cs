@@ -1,4 +1,5 @@
 ﻿using CloudNote.Domain.Entities.Areas;
+using CloudNote.Service.RoleApp;
 using CloudNote.Service.UserApp;
 using CloudNote.Service.UserApp.Dtos;
 using Microsoft.AspNetCore.Http;
@@ -12,13 +13,18 @@ namespace CloudNote.Web.Areas.Admin.Controllers
     public class AccountController : Controller
     {
         private IUserAppService _userAppService;
-        public AccountController(IUserAppService userAppService)
+        private IUserRoleAppService _userroleAppService;
+    
+        public AccountController(IUserAppService userAppService, IUserRoleAppService userRoleAppService)
         {
             _userAppService = userAppService;
+            _userroleAppService = userRoleAppService;
         }
 
         public IActionResult Index()
         {
+            var result = _userroleAppService.GetAllList(null);
+            var usrerole = _userAppService.GetType();
             return View();
         }
 
