@@ -35,10 +35,10 @@
                         </a>
                     </li>
                     <li class="layui-nav-item" style="margin-right:15px">
-                        <a href=""><img src="//t.cn/RCzsdCq" class="layui-nav-img">我</a>
+                        <a href=""><img src="//t.cn/RCzsdCq" class="layui-nav-img">@User.Identity.Name</a>
                         <dl class="layui-nav-child">
-                            <dd><a href="javascript:;">修改信息</a></dd>
-                            <dd><a href="@Url.Action("Login","Account")">退出登录</a></dd>
+                            <dd><a onclick="updatePassword()">修改密码</a></dd>
+                            <dd><a href="@Url.Action("Index","Account")">退出登录</a></dd>
                         </dl>
                     </li>
                 </ul>
@@ -62,10 +62,10 @@
                                     <a href="@Url.Action("Index","User")" class=@(ViewData["Name"].ToString() == "用户管理" ? "layui-this": "")>用户管理</a>
                                 </dd>
                                 <dd>
-                                    <a lay-href="user/administrators/list.html">权限管理</a>
+                                    <a href="@Url.Action("Index","Authority")" class=@(ViewData["Name"].ToString() == "权限管理" ? "layui-this": "")>权限管理</a>
                                 </dd>
                                 <dd>
-                                    <a lay-href="user/administrators/role.html">角色管理</a>
+                                    <a href="@Url.Action("Index","Role")" class=@(ViewData["Name"].ToString() == "角色管理" ? "layui-this": "")>角色管理</a>
                                 </dd>
                             </dl>
                         </li>
@@ -195,5 +195,117 @@
                 background-color: #20222A !important;
             }
         </style><div class="layui-layer-move"></div>*@
+    <script>
+        layui.use('form', function () {
+            var form = layui.form;
+            form.verify({
+                username: function (value, item) { //value：表单的值、item：表单的DOM对象
+                    if (!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(value)) {
+                        return '用户名不能有特殊字符';
+                    }
+                    if (/(^\_)|(\__)|(\_+$)/.test(value)) {
+                        return '用户名首尾不能出现下划线\'_\'';
+                    }
+                    if (/^\d+\d+\d$/.test(value)) {
+                        return '用户名不能全为数字';
+                    }
+
+                    //如果不想自动弹出默认提示框，可以直接返回 true，这时你可以通过其他任意方式提示（v2.5.7 新增）
+                    if (value === 'xxx') {
+                        alert('用户名不能为敏感词');
+                        return true;
+                    }
+                }
+
+                //我们既支持上述函数式的方式，也支持下述数组的形式
+                //数组的两个值分别代表：[正则匹配、匹配不符时的提示文字]
+                , pass: [
+                    /^[\S]{6,12}$/
+                    , '密码必须6到12位，且不能出现空格'
+                ]
+                , newPassword: function (value, item) {
+                    var newPassword = $("[name='newPassword']").val();
+                    var rePassword = $("[name='rePassword']").val();
+                    if (newPassword != rePassword) {
+                        return '两次密码输入不一致';
+                    }
+                }
+            });
+
+            form.on('submit(passwordSubmit)', function (data) {
+                $.ajax({
+                    type: "post",
+                    dataType: "json",
+                    data: data.field,
+                    url: '@Url.Action("Save", "User")',
+                    success: function (message) {
+                        if (message == "") {
+                            layer.msg('密码修改成功');
+                            parent.layer.closeAll()
+                            parent.reload();
+                            //$.post('Index?id=' + data.field.id);
+                        }
+                        else {
+                            layer.msg(message);
+                            return false;
+                        }
+                    }, error: function (e) {
+                        layer.msg("请求异常，请重试", { shift: 6 })
+                    }
+                });
+                return false;
+
+            });
+        });
+
+
+        function updatePassword() {
+            layer.open({
+                type: 1,
+                title: '修改密码',
+                content: $('#passwordEdit'), //这里content是一个DOM，注意：最好该元素要存放在body最外层，否则可能被其它的相对元素所影响
+                success: function (layero, index) {
+                    console.log(layero, index);
+                }
+            });
+        }
+
+        function passWordSave()
+        {
+
+        }
+    </script>
+    <form class="layui-form layui-form-pane" asp-action="Save" asp-controller="User" id="passwordEdit" style="display:none">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">旧密码</label>
+                <div class="layui-input-block">
+                    <input type="text" name="oldPassword" required lay-verify="username" placeholder="请输入旧密码" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">新密码</label>
+                <div class="layui-input-block">
+                    <input type="text" name="newPassword" placeholder="请输入新密码" lay-verify="newPassword" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">确认密码</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="rePassword" placeholder="再次输入新密码" lay-verify="newPassword" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="passwordSubmit">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
 </body>
+
 </html>

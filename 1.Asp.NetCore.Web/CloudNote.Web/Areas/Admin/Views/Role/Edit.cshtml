@@ -1,0 +1,86 @@
+﻿@{
+    Layout = null;
+}
+@model CloudNote.Service.RoleApp.Dtos.RoleDto
+<link href="~/layui/dist/css/layui.css" rel="stylesheet" />
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/layui/dist/layui.js"></script>
+<div style="margin:15px;">
+    <form class="layui-form">
+        <input type="hidden" name="id" value="@Model.Id" />
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">角色名称</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="RoleName" value="@Model.RoleName" lay-verify="required" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">角色代码</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="RoleCode" value="@Model.RoleCode" lay-verify="required" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">角色类型</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="RoleType" value="@Model.RoleType" lay-verify="required" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">创建人</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="CreateName" value="@User.Identity.Name" lay-verify="required" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+          
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">备注</label>
+                <div class="layui-input-block">
+                    <textarea placeholder="请输入内容" name="Description" class="layui-textarea">@Model.Description</textarea>
+                </div>
+            </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="fromSubmit">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+        <!-- 更多表单结构排版请移步文档左侧【页面元素-表单】一项阅览 -->
+    </form>
+</div>
+
+<script>
+    layui.use('form', function () {
+        var form = layui.form;
+        //监听提交
+        debugger;
+        form.on('submit(fromSubmit)', function (data) {
+            console.log(JSON.stringify(data.field));
+            $.ajax({
+                type: "post",
+                dataType: "json",
+                data: data.field,
+                url: '@Url.Action("Save", "Role")',
+                success: function (message) {
+                    if (message == "") {
+                        layer.msg('信息修改成功');
+                        parent.layer.closeAll()
+                        parent.reload();
+                        //$.post('Index?id=' + data.field.id);
+                    }
+                    else {
+                        layer.msg(message);
+                        return false;
+                    }
+                }, error: function (e) {
+                    layer.msg("请求异常，请重试", { shift: 6 })
+                }
+            })
+            return false;
+         });
+    });
+</script>

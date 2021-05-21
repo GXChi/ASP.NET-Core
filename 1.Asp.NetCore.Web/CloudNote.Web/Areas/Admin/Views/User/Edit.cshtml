@@ -13,7 +13,7 @@
             <div class="layui-inline">
                 <label class="layui-form-label">用户名</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="UserName" value="@Model.UserName" autocomplete="off" class="layui-input">
+                    <input type="text" name="UserName" value="@Model.UserName" lay-verify="required" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-inline">
@@ -23,16 +23,16 @@
                 </div>
             </div>
         </div>
-        @*<div class="layui-form-item">
+        <div class="layui-form-item">
             <div class="layui-inline">
                 <label class="layui-form-label">年龄</label>
-                <div class="layui-input-block">
+                <div class="layui-input-inline">
                     <input type="text" name="Age" value="@Model.Age" lay-verify="required" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-inline">
                 <label class="layui-form-label">民族</label>
-                <div class="layui-input-block">
+                <div class="layui-input-inline">
                     <input type="text" name="Ethnicity" value="@Model.Ethnicity" lay-verify="required" autocomplete="off" class="layui-input">
                 </div>
             </div>
@@ -49,7 +49,7 @@
         <div class="layui-form-item">
             <div class="layui-inline">
                 <label class="layui-form-label">性别</label>
-                <div class="layui-input-block">
+                <div class="layui-input-inline">
                     <select name="Sex" lay-filter="aihao" value="@Model.Sex" lay-verify="required">
                         <option value="0">男</option>
                         <option value="1">女</option>
@@ -58,7 +58,7 @@
             </div>
             <div class="layui-inline">
                 <label class="layui-form-label">电话</label>
-                <div class="layui-input-block">
+                <div class="layui-input-inline">
                     <input type="text" name="Phone" value="@Model.Phone" placeholder="请输入" lay-verify="required|phone" autocomplete="off" class="layui-input">
                 </div>
             </div>
@@ -72,9 +72,9 @@
         <div class="layui-form-item layui-form-text">
             <label class="layui-form-label">个性签名</label>
             <div class="layui-input-block">
-                <textarea placeholder="请输入内容" name="PersonalSignature" value="@Model.PersonalSignature" class="layui-textarea"></textarea>
+                <textarea placeholder="请输入内容" name="PersonalSignature" class="layui-textarea">@Model.PersonalSignature</textarea>
             </div>
-        </div>*@
+        </div>
         <div class="layui-form-item">
             <div class="layui-input-block">
                 <button class="layui-btn" lay-submit lay-filter="fromSubmit">立即提交</button>

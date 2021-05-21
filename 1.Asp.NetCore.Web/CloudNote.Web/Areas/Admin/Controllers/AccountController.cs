@@ -1,10 +1,14 @@
 ﻿using CloudNote.Domain.Entities.Areas;
-using CloudNote.Service.RoleApp;
 using CloudNote.Service.UserApp;
 using CloudNote.Service.UserApp.Dtos;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 using Utility.Helper;
 
 namespace CloudNote.Web.Areas.Admin.Controllers
@@ -14,7 +18,7 @@ namespace CloudNote.Web.Areas.Admin.Controllers
     {
         private IUserAppService _userAppService;
         private IUserRoleAppService _userroleAppService;
-    
+
         public AccountController(IUserAppService userAppService, IUserRoleAppService userRoleAppService)
         {
             _userAppService = userAppService;
@@ -37,9 +41,23 @@ namespace CloudNote.Web.Areas.Admin.Controllers
                 var user = _userAppService.CheckUser(entity.UserName, entity.PassWord);
                 if (user != null)
                 {
-                    //记录Session
-                    HttpContext.Session.SetString("CurrentUserId", user.Id.ToString());
-                    HttpContext.Session.Set("CurrentUser", ByteConvertHelper.ObjectToBytes(user));
+                    List<Claim> Claims = new List<Claim> 
+                    {
+                        new Claim(ClaimTypes.Name, entity.UserName),
+                        new Claim("UserId", entity.Id.ToString()),
+                        new Claim(ClaimTypes.NameIdentifier, "UserId")
+                    };
+                    var identity = new ClaimsIdentity(Claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                    var claimsPrincipal = new ClaimsPrincipal(identity);
+                    HttpContext.User = claimsPrincipal;
+                    HttpContext.SignInAsync(claimsPrincipal, new AuthenticationProperties() { IsPersistent = false, }) ;
+                    if (identity.AuthenticationType == "Cookies")
+                    {
+                        //记录Session
+                        HttpContext.Session.SetString("CurrentUserId", user.Id.ToString());
+                        HttpContext.Session.Set("CurrentUser", ByteConvertHelper.
+                              ObjectToBytes(user));
+                    }
                 }
                 else
                 {

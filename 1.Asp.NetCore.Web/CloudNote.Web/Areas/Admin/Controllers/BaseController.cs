@@ -14,11 +14,11 @@ namespace CloudNote.Web.Areas.Admin.Controllers
         {
             byte[] result;
             context.HttpContext.Session.TryGetValue("CurrentUser", out result);
-            if (result == null)
-            {
-                context.Result = new RedirectResult("/Admin/Account");
-                return;
-            }
+            //if (result == null)
+            //{
+            //    context.Result = new RedirectResult("/Admin/Account");
+            //    return;
+            //}
             base.OnActionExecuting(context);
         }
 

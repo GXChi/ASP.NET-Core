@@ -79,10 +79,25 @@ namespace CloudNote.Web.Areas.Admin.Controllers
         public JsonResult Save(UserDto dto)
         {
             var message = string.Empty;
-            var isSave = _userAppService.InsertOrUpdate(dto);
-            if (!isSave)
+            try
             {
-                message = "保存失败！";
+                if (dto.Id == Guid.Empty)
+                {
+                    dto.CreateDate = DateTime.Now;
+                }
+                else
+                {
+                    dto.UpdateDate = DateTime.Now;
+                }
+                var isSave = _userAppService.InsertOrUpdate(dto);
+                if (!isSave)
+                {
+                    message = "保存失败！";
+                }
+            }
+            catch (Exception ex)
+            {
+                message = ex.Message;
             }
             return Json(message);
         }

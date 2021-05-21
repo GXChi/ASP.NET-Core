@@ -15,7 +15,7 @@ namespace CloudNote.Service.AuthorityApp
         private readonly IAuthorityRepository _authorityRepository;
         private readonly IMapper _mapper;
         MapperConfiguration mapperConfig = MyMapper.Initialize();
-     
+
         public AuthorityAppService(IAuthorityRepository AuthorityRepository)
         {
             _authorityRepository = AuthorityRepository;
@@ -27,14 +27,14 @@ namespace CloudNote.Service.AuthorityApp
             return _mapper.Map<AuthorityDto>(_authorityRepository.GetById(id));
         }
 
+        public List<AuthorityDto> GetAllList(int startPage, int pageSize, out int rowCount, Expression<Func<AuthorityEntity, bool>> where, Expression<Func<AuthorityEntity, object>> order)
+        {
+            return _mapper.Map<List<AuthorityDto>>(_authorityRepository.LoadPageList(startPage, pageSize, out rowCount, where, order));
+        }
+
         public List<AuthorityDto> GetAllList()
         {
             return _mapper.Map<List<AuthorityDto>>(_authorityRepository.GetAllList());
-        }
-
-        public List<AuthorityDto> GetAllList(Expression<Func<AuthorityEntity, bool>> where)
-        {          
-            return _mapper.Map<List<AuthorityDto>>(_authorityRepository.GetAllList(where));
         }
 
         public void Delete(Guid id)
@@ -43,7 +43,7 @@ namespace CloudNote.Service.AuthorityApp
         }
 
         public bool InsertOrUpdate(AuthorityDto dto)
-        {
+        {            
             var result = _authorityRepository.InsertOrUpdate(_mapper.Map<AuthorityEntity>(dto));
             return result == null ? false : true;
         }

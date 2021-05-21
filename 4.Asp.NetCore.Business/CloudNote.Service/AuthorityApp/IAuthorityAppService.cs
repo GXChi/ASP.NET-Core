@@ -10,7 +10,7 @@ namespace CloudNote.Service.NoteApp
     {
         List<AuthorityDto> GetAllList();
 
-        List<AuthorityDto> GetAllList(Expression<Func<AuthorityEntity, bool>> where);
+        public List<AuthorityDto> GetAllList(int startPage, int pageSize, out int rowCount, Expression<Func<AuthorityEntity, bool>> where, Expression<Func<AuthorityEntity, object>> order);
 
         AuthorityDto GetList(Guid id);
 

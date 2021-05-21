@@ -10,7 +10,6 @@
         <button class="layui-btn layui-btn-sm" lay-event="isAll">验证是否全选</button>
         <button class="layui-btn layui-btn-sm" lay-event="reload">重载（保留初始参数）</button>
         <button class="layui-btn layui-btn-sm" lay-event="reload2">重载（不保留初始参数）</button>
-        <button class="layui-btn layui-btn-sm" lay-event="setRole">分配角色</button>
         <button class="layui-btn layui-btn-sm" id="dropdown">
             更多菜单
             <i class="layui-icon layui-icon-down layui-font-12"></i>
@@ -27,7 +26,6 @@
 <script type="text/html" id="barOperation">
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
-    <a class="layui-btn layui-btn-xs" lay-event="setRole">授权</a>
 </script>
 
 <script>
@@ -39,17 +37,6 @@
             , laytpl = layui.laytpl
             , dropdown = layui.dropdown;
 
-        //全局设定某参数
-        //table.set({
-        //    where: {
-        //        token: '默认 token 参数'
-        //    }
-        //    //,defaultToolbar: ['filter']
-        //    , limit: 30
-        //    //,url: 'list'
-        //    ,height: 900
-        //});
-
         //渲染
         window.ins = table.render({
             elem: '#test'
@@ -57,7 +44,7 @@
             //, height: 860
             //,width: 600
             , title: '用户数据表'
-            , url: 'User/Index'
+            , url: 'Role/Index'
             , method: 'Post'
             , request: {
                 pageName: 'curr' //页码的参数名称，默认：page
@@ -88,25 +75,15 @@
             , cols: [[
                 { type: 'checkbox', fixed: 'left' }
                 , { field: 'xuhao', title: '序号', type: 'numbers'}
-                , { field: 'userName', title: '用户名', width: 120, edit: 'text', templet: '#usernameTpl' }
-                , { field: 'nickName', title: '昵称', width: 120, edit: 'text', templet: '#usernameTpl' }
-                , { field: 'sex', title: '性别', width: 80, edit: 'text', sort: true }
-                , { field: 'phone', title: '手机', width: 120, templet: '#cityTpl1' }
-
-                , {
-                    field: 'email', title: '邮箱', hide: 0, width: 150, edit: 'text', templet: function (d) {
-                        console.log(d);
-                        return '<em>' + d.email + '</em>'
-                    }
-                }
-                , { field: 'address', title: '地址', width: 120, templet: '#cityTpl1' }
-                , { field: 'personalSignature', title: '签名' }
-                , { field: 'experience', title: '积分', width: 80, sort: true, totalRow: '{{ d.TOTAL_NUMS }} 分', templet: '<div>{{ d.loginTimes }} 分</div>' }
-                , { field: 'loginTimes', title: '登入次数', width: 100, sort: true, totalRow: true }
-                , { field: 'createDate', title: '加入时间', width: 120 }
-                , { field: 'lastloginDate', title: '最后登录时间', width: 120 }
-                , { field: 'isEnable', title: '状态', width: 120 }
-                , { /*field: 'id',*/ fixed: 'right', title: '操作', toolbar: '#barOperation', width: 150 }
+                , { field: 'roleName', title: '角色名称', edit: 'text', templet: '#usernameTpl' }
+                , { field: 'roleCode', title: '角色代码', edit: 'text', templet: '#usernameTpl' }
+                , { field: 'roleType', title: '角色类型', edit: 'text', sort: true }  
+                , { field: 'createDate', title: '创建时间' }
+                , { field: 'createName', title: '创建人' }
+                , { field: 'updateDate', title: '更新时间' }
+                , { field: 'updateName', title: '更新人' }
+                , { field: 'description', title: '备注', templet: '#cityTpl1' }
+                , { fixed: 'right', title: '操作', toolbar: '#barOperation', width: 150 }
             ]]
 
             , initSort1: {
@@ -140,21 +117,7 @@
             , error: function (res, msg) {
                 console.log(res, msg)
             }
-
-            /*
-            ,response: {
-              statusName: 'status'
-              ,statusCode: 200
-            }
-            ,parseData: function(res){
-              return {
-                "status": res.status
-                ,"msg": res.message
-                ,"count": res.total
-                ,"data": res.data.list
-              };
-            }
-            */
+          
         });
 
         //工具栏事件
@@ -166,9 +129,10 @@
                     layer.msg('添加');
                     layer.open({
                         type: 2,
-                        title: '用户信息编辑',
-                        area: ['800px', '550px'],
-                        content: 'User/Edit',
+                        title: '角色信息编辑',
+                        area: ['700px', '500px'],
+                        content: 'Role/Edit',
+
                     })
                     break;
                 case 'update':
@@ -229,17 +193,6 @@
                         //,height: 500
                     });
                     break;
-                case 'setRole':
-                    var data = checkStatus.data;
-                    if (data.length == 0) {
-                        layer.msg("请选择用户");
-                    }
-                    if (data.length > 1)
-                    {
-                        layer.msg("请可以选择一个用户");
-                    }
-                    break;
-
             };
         });
 
@@ -248,17 +201,19 @@
             console.log(data);
             if (obj.event === 'del') {
                 layer.confirm('真的删除行么', function (index) {
+
                     //向服务端发送删除指令
                     $.ajax({
                         type: "post",
                         dataType: "json",
                         data: data.field,
-                        url: '@Url.Action("Delete", "User")?id=' + data.id,
+                        url: '@Url.Action("Delete", "Role")?id=' + data.id,
                         success: function (message) {
                             if (message == "") {
                                 obj.del();
                                 layer.close(index);
                                 layer.msg('删除成功');
+                                @*location.location = '@Url.Action("Index","Home")';*@
                             }
                             else {
                                 layer.msg(message);
@@ -282,60 +237,14 @@
                 //});
                 layer.open({
                     type: 2,
-                    title: '用户信息编辑',
-                    area: ['800px', '550px'],
-                    content: 'User/Edit?id=' + data.id,
-
-                })
-            } else if (obj.ev === 'setRole') {
-                layer.open({
-                    type: 2,
-                    title: '用户信息编辑',
-                    area: ['800px', '550px'],
-                    content: 'User/Edit?id=' + data.id,
+                    title: '权限信息编辑',
+                    area: ['800px', '600px'],
+                    content: 'Role/Edit?id=' + data.id,
 
                 })
             }
-
         });
-    })
-    //layui.use('laydate', function () {
-    //    var laydate = layui.laydate;
-
-    //    //执行一个laydate实例
-    //    laydate.render({
-    //        elem: '#start' //指定元素
-    //    });
-
-    //    //执行一个laydate实例
-    //    laydate.render({
-    //        elem: '#end' //指定元素
-    //    });
-    //});
-
-    /*用户-停用*/
-    //function member_stop(obj, id) {
-    //    layer.confirm('确认要停用吗？', function (index) {
-
-    //        if ($(obj).attr('title') == '启用') {
-
-    //            //发异步把用户状态进行更改
-    //            $(obj).attr('title', '停用')
-    //            $(obj).find('i').html('&#xe62f;');
-
-    //            $(obj).parents("tr").find(".td-status").find('span').addClass('layui-btn-disabled').html('已停用');
-    //            layer.msg('已停用!', { icon: 5, time: 1000 });
-
-    //        } else {
-    //            $(obj).attr('title', '启用')
-    //            $(obj).find('i').html('&#xe601;');
-
-    //            $(obj).parents("tr").find(".td-status").find('span').removeClass('layui-btn-disabled').html('已启用');
-    //            layer.msg('已启用!', { icon: 5, time: 1000 });
-    //        }
-
-    //    });
-    //}
+    })    
 
     function reload() {
         var index = layer.load(1);

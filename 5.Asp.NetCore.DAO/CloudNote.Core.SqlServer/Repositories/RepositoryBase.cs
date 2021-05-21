@@ -146,7 +146,7 @@ namespace CloudNote.Core.SqlServer.Repositories
         {
             #region Argument Validation
             if (entity == null)
-            {
+            {                
                 throw new ArgumentNullException("entity");
             }
             #endregion

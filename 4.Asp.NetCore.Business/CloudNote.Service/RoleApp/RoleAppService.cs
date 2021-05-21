@@ -47,9 +47,9 @@ namespace CloudNote.Service.NoteApp
             return result == null ? false : true;
         }
 
-        //public List<RoleDto> GetPage(int startPage, int pageSize, out int rowCount, Expression<Func<RoleEntity, bool>> where, Expression<Func<RoleEntity, object>> order)
-        //{
-        //    return Mapper.Map<List<RoleDto>>(_RoleRepository.LoadPageList(startPage, pageSize, out rowCount, where, order));
-        //}
+        public List<RoleDto> GetPageList(int startPage, int pageSize, out int rowCount, Expression<Func<RoleEntity, bool>> where, Expression<Func<RoleEntity, object>> order)
+        {
+            return _mapper.Map<List<RoleDto>>(_roleRepository.LoadPageList(startPage, pageSize, out rowCount, where, order));
+        }
     }
 }

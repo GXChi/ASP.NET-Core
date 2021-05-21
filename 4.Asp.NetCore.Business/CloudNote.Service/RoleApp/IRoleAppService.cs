@@ -18,7 +18,7 @@ namespace CloudNote.Service.RoleApp
 
         bool InsertOrUpdate(RoleDto entity);
 
-        //List<RoleDto> GetPage(int startPage, int pageSize, out int rowCount, Expression<Func<RoleEntity, bool>> where, Expression<Func<RoleEntity, object>> order);
+        List<RoleDto> GetPageList(int startPage, int pageSize, out int rowCount, Expression<Func<RoleEntity, bool>> where, Expression<Func<RoleEntity, object>> order);
 
     }
 }
