@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CloudNote.Core.SqlServer.Migrations
 {
     [DbContext(typeof(CloudNoteDbContext))]
-    [Migration("20210513024702_20210503")]
-    partial class _20210503
+    [Migration("20210522154115_2021522005")]
+    partial class _2021522005
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -83,6 +83,9 @@ namespace CloudNote.Core.SqlServer.Migrations
                     b.Property<string>("CreateName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("RoleEntityId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("RoleId")
                         .HasColumnType("nvarchar(max)");
 
@@ -99,6 +102,8 @@ namespace CloudNote.Core.SqlServer.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("RoleEntityId");
 
                     b.ToTable("RoleAuthoritys");
                 });
@@ -177,7 +182,7 @@ namespace CloudNote.Core.SqlServer.Migrations
                     b.Property<bool>("IsEnable")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("LastLoginTime")
+                    b.Property<DateTime>("LastLoginDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("LoginTimes")
@@ -245,6 +250,9 @@ namespace CloudNote.Core.SqlServer.Migrations
                     b.Property<string>("UpdateName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("UserEntityId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(max)");
 
@@ -252,6 +260,8 @@ namespace CloudNote.Core.SqlServer.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserEntityId");
 
                     b.ToTable("UserRoles");
                 });
@@ -513,6 +523,30 @@ namespace CloudNote.Core.SqlServer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Videos");
+                });
+
+            modelBuilder.Entity("CloudNote.Domain.Entities.Areas.RoleAuthorityEntity", b =>
+                {
+                    b.HasOne("CloudNote.Domain.Entities.Areas.RoleEntity", null)
+                        .WithMany("RoleAuthoritys")
+                        .HasForeignKey("RoleEntityId");
+                });
+
+            modelBuilder.Entity("CloudNote.Domain.Entities.Areas.UserRoleEntity", b =>
+                {
+                    b.HasOne("CloudNote.Domain.Entities.Areas.UserEntity", null)
+                        .WithMany("UserRoles")
+                        .HasForeignKey("UserEntityId");
+                });
+
+            modelBuilder.Entity("CloudNote.Domain.Entities.Areas.RoleEntity", b =>
+                {
+                    b.Navigation("RoleAuthoritys");
+                });
+
+            modelBuilder.Entity("CloudNote.Domain.Entities.Areas.UserEntity", b =>
+                {
+                    b.Navigation("UserRoles");
                 });
 #pragma warning restore 612, 618
         }

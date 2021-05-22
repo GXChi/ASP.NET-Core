@@ -526,7 +526,7 @@ namespace CloudNote.Core.SqlServer.Migrations
             modelBuilder.Entity("CloudNote.Domain.Entities.Areas.RoleAuthorityEntity", b =>
                 {
                     b.HasOne("CloudNote.Domain.Entities.Areas.RoleEntity", null)
-                        .WithMany("UserRoles")
+                        .WithMany("RoleAuthoritys")
                         .HasForeignKey("RoleEntityId");
                 });
 
@@ -539,7 +539,7 @@ namespace CloudNote.Core.SqlServer.Migrations
 
             modelBuilder.Entity("CloudNote.Domain.Entities.Areas.RoleEntity", b =>
                 {
-                    b.Navigation("UserRoles");
+                    b.Navigation("RoleAuthoritys");
                 });
 
             modelBuilder.Entity("CloudNote.Domain.Entities.Areas.UserEntity", b =>

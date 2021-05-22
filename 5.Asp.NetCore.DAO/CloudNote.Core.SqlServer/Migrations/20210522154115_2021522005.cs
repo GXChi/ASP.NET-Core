@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CloudNote.Core.SqlServer.Migrations
 {
-    public partial class _20210503003 : Migration
+    public partial class _2021522005 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -126,27 +126,6 @@ namespace CloudNote.Core.SqlServer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RoleAuthoritys",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RoleId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RoleName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    AuthorityId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    AuthorityName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreateName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreateID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdateName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UpdateID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RoleAuthoritys", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Roles",
                 columns: table => new
                 {
@@ -168,27 +147,6 @@ namespace CloudNote.Core.SqlServer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserRoles",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RoleId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RoleName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreateName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreateID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdateName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UpdateID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserRoles", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -203,7 +161,7 @@ namespace CloudNote.Core.SqlServer.Migrations
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PersonalSignature = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastLoginTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastLoginDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LoginTimes = table.Column<int>(type: "int", nullable: false),
                     IsDelete = table.Column<bool>(type: "bit", nullable: false),
                     IsEnable = table.Column<bool>(type: "bit", nullable: false),
@@ -244,6 +202,72 @@ namespace CloudNote.Core.SqlServer.Migrations
                 {
                     table.PrimaryKey("PK_Videos", x => x.Id);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "RoleAuthoritys",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    RoleId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RoleName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AuthorityId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AuthorityName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RoleEntityId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CreateName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreateID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdateName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UpdateID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RoleAuthoritys", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RoleAuthoritys_Roles_RoleEntityId",
+                        column: x => x.RoleEntityId,
+                        principalTable: "Roles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserRoles",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RoleId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RoleName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserEntityId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CreateName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreateID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdateName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UpdateID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserRoles", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserRoles_Users_UserEntityId",
+                        column: x => x.UserEntityId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RoleAuthoritys_RoleEntityId",
+                table: "RoleAuthoritys",
+                column: "RoleEntityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserRoles_UserEntityId",
+                table: "UserRoles",
+                column: "UserEntityId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -267,16 +291,16 @@ namespace CloudNote.Core.SqlServer.Migrations
                 name: "RoleAuthoritys");
 
             migrationBuilder.DropTable(
-                name: "Roles");
-
-            migrationBuilder.DropTable(
                 name: "UserRoles");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Videos");
 
             migrationBuilder.DropTable(
-                name: "Videos");
+                name: "Roles");
+
+            migrationBuilder.DropTable(
+                name: "Users");
         }
     }
 }

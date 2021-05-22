@@ -8,6 +8,6 @@ namespace CloudNote.Domain.Entities.Areas
         public string RoleCode { get; set; }
         public string RoleType { get; set; }
         public string Description { get; set; }
-        public List<RoleAuthorityEntity> UserRoles { get; set; }
+        public List<RoleAuthorityEntity> RoleAuthoritys { get; set; }
     }
 }

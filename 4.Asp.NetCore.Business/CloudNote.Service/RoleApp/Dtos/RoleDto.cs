@@ -11,6 +11,6 @@ namespace CloudNote.Service.RoleApp.Dtos
         public string RoleType { get; set; }
         public string Description { get; set; }
 
-        public List<RoleAuthorityEntity> UserRoles { get; set; }
+        public List<RoleAuthorityEntity> RoleAuthoritys { get; set; }
     }
 }
