@@ -75,9 +75,9 @@ if (!process.env.TRAVIS) {
 }
 
 // 变量检查
-if (!process.env.SAUCE_UserName || !process.env.SAUCE_ACCESS_KEY) {
+if (!process.env.SAUCE_USERNAME || !process.env.SAUCE_ACCESS_KEY) {
     console.error('---------------');
-    console.error('Make sure the SAUCE_UserName and SAUCE_ACCESS_KEY environment variables are set.');
+    console.error('Make sure the SAUCE_USERNAME and SAUCE_ACCESS_KEY environment variables are set.');
     console.error('---------------');
     process.exit(1);
 }

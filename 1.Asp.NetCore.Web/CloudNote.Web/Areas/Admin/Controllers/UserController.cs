@@ -1,4 +1,6 @@
-﻿using CloudNote.Service.UserApp;
+﻿using CloudNote.Service.RoleApp;
+using CloudNote.Service.RoleApp.Dtos;
+using CloudNote.Service.UserApp;
 using CloudNote.Service.UserApp.Dtos;
 using CloudNote.Web.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -14,9 +16,13 @@ namespace CloudNote.Web.Areas.Admin.Controllers
     public class UserController : BaseController
     {
         private IUserAppService _userAppService;
-        public UserController(IUserAppService userAppService)
+        private IRoleAppService _roleAppService;
+        private IUserRoleAppService _userRoleAppService;
+        public UserController(IUserAppService userAppService, IUserRoleAppService userRoleAppService, IRoleAppService roleAppService)
         {
             _userAppService = userAppService;
+            _userRoleAppService = userRoleAppService;
+            _roleAppService = roleAppService;
         }
         public IActionResult Index()
         {
@@ -110,6 +116,43 @@ namespace CloudNote.Web.Areas.Admin.Controllers
             try
             {
                 _userAppService.Delete(id);
+            }
+            catch (Exception ex)
+            {
+                message = ex.Message;
+            }
+            return Json(message);
+        }
+
+        public IActionResult UserAuthorization(Guid id)
+        {
+            JsonData<UserDto> userData = new JsonData<UserDto>();
+            userData.Data = new List<UserDto>();
+            userData.Data.Add(_userAppService.GetUserById(id));
+
+            if (userData.Data != null && userData.Data.Count > 0)
+            {
+                ViewBag.UserRole = userData;
+            }
+
+            JsonData<RoleDto> roleData = new JsonData<RoleDto>();
+            roleData.Data = _roleAppService.GetAllList();
+            ViewBag.RoleData = roleData;
+
+            JsonData<UserRoleDto> userRoleData = new JsonData<UserRoleDto>();
+            userRoleData.Data = _userRoleAppService.GetAllList(null);
+            return View(userRoleData); 
+        }
+
+        public JsonResult UserAuthorizationSave(UserRoleDto dto)
+        {
+            var message = string.Empty;
+            try
+            {
+                if (!_userRoleAppService.InsertOrUpdate(dto))
+                {
+                    message = "用户分配角色失败！";
+                }
             }
             catch (Exception ex)
             {

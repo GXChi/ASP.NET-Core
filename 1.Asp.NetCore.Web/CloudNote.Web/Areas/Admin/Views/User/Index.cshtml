@@ -233,11 +233,21 @@
                     var data = checkStatus.data;
                     if (data.length == 0) {
                         layer.msg("请选择用户");
+                        return false;
                     }
                     if (data.length > 1)
                     {
                         layer.msg("请可以选择一个用户");
+                        return false;
                     }
+                    alert(data.id);
+                    layer.open({
+                        type: 2,
+                        title: '用户角色分配',
+                        area: ['800px', '550px'],
+                        content: 'User/UserAuthorization?id=' + data.id,
+
+                    })
                     break;
 
             };
@@ -287,12 +297,12 @@
                     content: 'User/Edit?id=' + data.id,
 
                 })
-            } else if (obj.ev === 'setRole') {
+            } else if (obj.event === 'setRole') {
                 layer.open({
                     type: 2,
-                    title: '用户信息编辑',
+                    title: '用户角色分配',
                     area: ['800px', '550px'],
-                    content: 'User/Edit?id=' + data.id,
+                    content: 'User/UserAuthorization?id=' + data.id,
 
                 })
             }

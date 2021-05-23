@@ -5,7 +5,7 @@
   ,"data": {
     "list": [{
       "id": "10001"
-      ,"UserName": "杜甫3"
+      ,"username": "杜甫3"
       ,"email": "xianxin@layui.com"
       ,"sex": "男"
       ,"city": "浙江杭州"
@@ -16,7 +16,7 @@
       ,"joinTime": "2016-10-14"
     }, {
       "id": "10002"
-      ,"UserName": "李白3"
+      ,"username": "李白3"
       ,"email": "xianxin@layui.com"
       ,"sex": "男"
       ,"city": "浙江杭州"
@@ -28,7 +28,7 @@
       ,"LAY_CHECKED": true
     }, {
       "id": "10003"
-      ,"UserName": "王勃"
+      ,"username": "王勃"
       ,"email": "xianxin@layui.com"
       ,"sex": "男"
       ,"city": "浙江杭州"
@@ -39,7 +39,7 @@
       ,"joinTime": "2016-10-14"
     }, {
       "id": "10004"
-      ,"UserName": "李清照"
+      ,"username": "李清照"
       ,"email": "xianxin@layui.com"
       ,"sex": "女"
       ,"city": "浙江杭州"
@@ -50,7 +50,7 @@
       ,"joinTime": "2016-10-14"
     }, {
       "id": "10005"
-      ,"UserName": "冰心"
+      ,"username": "冰心"
       ,"email": "xianxin@layui.com"
       ,"sex": "女"
       ,"city": "浙江杭州"
@@ -61,7 +61,7 @@
       ,"joinTime": "2016-10-14"
     }, {
       "id": "10006"
-      ,"UserName": "贤心"
+      ,"username": "贤心"
       ,"email": "xianxin@layui.com"
       ,"sex": "男"
       ,"city": "浙江杭州"

@@ -9369,7 +9369,7 @@ jQuery.extend( {
 		timeout: 0,
 		data: null,
 		dataType: null,
-		UserName: null,
+		username: null,
 		password: null,
 		cache: null,
 		throws: false,
@@ -10209,7 +10209,7 @@ if ( xhrSupported ) {
 						options.type,
 						options.url,
 						options.async,
-						options.UserName,
+						options.username,
 						options.password
 					);
 
