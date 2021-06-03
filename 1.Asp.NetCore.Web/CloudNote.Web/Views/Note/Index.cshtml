@@ -125,6 +125,7 @@
     }
     var editor;
     $(function () {
+        debugger;
         initEditor();
 
         themeSelect("editormd-theme-select", editormd.themes, "theme", function ($this, theme) {
@@ -145,19 +146,22 @@
             var data = { Content: editor.getMarkdown(), Title: title }
             console.log(data);
             $.ajax({
-               type: 'POST',
-               url: '@Url.Action("Create","Note")',
-               data: data,
-               success: function (message) {
-                   alert("保存成功");
-               },
-               error: function (request, status, err) {
-                   alert("保存失败");
-               }
+                type: 'POST',
+                url: '@Url.Action("Create","Note")',
+                data: data,
+                success: function (message) {
+                    alert("保存成功");
+                },
+                error: function (request, status, err) {
+                    alert("保存失败");
+                }
             });
         });
 
-        getNoteInfo('@Model[0].Id');
+        @*if (!(@Model != null && @Model.Count > 0)) {
+            getNoteInfo('@Model[0].Id');
+        }*@
+
     });
 
     function initEditor() {
@@ -193,7 +197,7 @@
         })
     }
 
-    function eidtMD() { 
+    function eidtMD() {
         $("#noteEditmdEdit").show();
         initEditor();
         editor.show();
