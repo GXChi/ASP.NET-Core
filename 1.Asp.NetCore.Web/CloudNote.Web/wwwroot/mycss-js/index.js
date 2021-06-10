@@ -1,5 +1,5 @@
 ﻿/** layuiAdmin.std-v1.6.1 LPPL License */
-; layui.extend({ setter: "config", admin: "js/admin", view: "js/view" }).define(["setter", "admin"], function (a) {
+; layui.extend({ setter: "config", admin: "/js/admin", view: "/js/view" }).define(["setter", "admin"], function (a) {
     var e = layui.setter,
         i = layui.element,
         n = layui.admin,

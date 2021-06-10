@@ -22,28 +22,7 @@ namespace CloudNote.Web.Areas.Admin.Controllers
             ViewData["Name"] = "权限管理";
             return View();
         }
-
-        [HttpPost]
-        public JsonResult Index(Guid id, int curr = 1, int nums = 20)
-        {
-            ViewData["Name"] = "权限管理";
-            string strJson = string.Empty;
-            int count;
-            JsonData<AuthorityDto> jsonData = new JsonData<AuthorityDto>();
-            if (id == Guid.Empty)
-            {
-                jsonData.Data = _authorityAppService.GetAllList(curr, nums, out count, null, x => x.CreateDate);
-                jsonData.Count = count;
-            }
-            else
-            {
-                var data = _authorityAppService.GetAllList(curr, nums, out count, x => x.Id == id, x => x.CreateDate);
-                jsonData.Data = data;
-                jsonData.Count = count;
-            }
-            return Json(jsonData); ;
-        }
-
+       
         public IActionResult Edit(Guid id)
         {
             var user = _authorityAppService.GetList(id);

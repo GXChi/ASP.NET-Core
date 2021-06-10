@@ -57,6 +57,11 @@ namespace CloudNote.Service.UserApp
             throw new NotImplementedException();
         }
 
+        public bool SetRole(string userId, List<UserRoleDto> userRole)
+        {
+            return _userRoleRepository.SetRole(userId, _mapper.Map<List<UserRoleEntity>>(userRole));
+        }
+
 
         //public List<UserDto> GetPage(int startPage, int pageSize, out int rowCount, Expression<Func<UserRoleEntity, bool>> where, Expression<Func<UserRoleEntity, object>> order)
         //{

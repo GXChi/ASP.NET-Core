@@ -1,6 +1,4 @@
 ﻿@model List<CloudNote.Service.UserApp.Dtos.UserDto>
-<script src="~/lib/jquery/dist/jquery.js"></script>
-<script src="~/layui/dist/layui.js"></script>
 <script type="text/html" id="toolbar">
     <div class="layui-btn-container">
         <button class="layui-btn layui-btn-sm" lay-event="add">新增</button>
@@ -57,7 +55,7 @@
             //, height: 860
             //,width: 600
             , title: '用户数据表'
-            , url: 'User/Index'
+            , url: 'DataProvide/GetUserData'
             , method: 'Post'
             , request: {
                 pageName: 'curr' //页码的参数名称，默认：page
@@ -246,7 +244,10 @@
                         title: '用户角色分配',
                         area: ['800px', '550px'],
                         content: 'User/UserAuthorization?id=' + data.id,
-
+                        btn: ['保存', '关闭'],
+                        yes: function (index, layero) {
+                            //按钮【按钮一】的回调
+                        }
                     })
                     break;
 
@@ -303,7 +304,13 @@
                     title: '用户角色分配',
                     area: ['800px', '550px'],
                     content: 'User/UserAuthorization?id=' + data.id,
-
+                    btn: ['保存', '关闭'],
+                    yes: function (index, layero) {
+                        //按钮【按钮一】的回调
+                        var iframe = window[layero.find('iframe')[0]['name']];
+                        iframe.userRoleSubmit();
+                        layer.close(index);
+                    }
                 })
             }
 

@@ -1,37 +1,64 @@
 ﻿@{
     Layout = null;
 }
-@model JsonData<CloudNote.Service.UserApp.Dtos.UserRoleDto>
+@model CloudNote.Service.UserApp.Dtos.UserDto
 <link href="~/layui/dist/css/layui.css" rel="stylesheet" />
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script src="~/layui/dist/layui.js"></script>
 <div style="margin:15px;">
-    <form class="layui-form">
+    <form class="layui-form" id="setRole">
         <!-- 提示：如果你不想用form，你可以换成div等任何一个普通元素 -->
-       
-        <div class="layui-form-item">
-            <div class="layui-inline">
-                <label class="layui-form-label">用户名</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="UserName" value="@Model.Data[0].Id" lay-verify="required" autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-inline">
-                <label class="layui-form-label">昵称</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="NickName" value="@Model.Data[0].RoleName" lay-verify="required" autocomplete="off" class="layui-input">
-                </div>
-            </div>
-        </div>
-     
+
         <div class="layui-form-item">
             <div class="layui-input-block">
-                <button class="layui-btn" lay-submit lay-filter="fromSubmit">立即提交</button>
-                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                <label class="layui-form-label">用户名</label>
+                <div class="layui-input-inline">
+                    <label>@Model.UserName</label>
+                </div>
             </div>
         </div>
-        <!-- 更多表单结构排版请移步文档左侧【页面元素-表单】一项阅览 -->
-    </form>
+        <div class="layui-form-item layui-fluid">
+            <div class="layui-row">
+                @{
+                    var roleCount = 0;
+                    var roleList = ViewBag.RoleData as List<CloudNote.Service.RoleApp.Dtos.RoleDto>;
+                    if (roleList != null)
+                    {
+                        foreach (var role in roleList)
+                        {                          
+                            var isChecked = string.Empty;
+                            foreach (var userRoel in Model.UserRoles)
+                            {
+                                if (userRoel.RoleName == role.RoleName)
+                                {
+                                    isChecked = "checked";
+                                    break;
+                                }
+                            }                     
+                            <input type="hidden" name="dtoList[@roleCount].UserId" value="@Model.Id" />
+                            <input type="hidden" name="dtoList[@roleCount].UserName" value="@Model.UserName" />
+                            <input type="hidden" name="dtoList[@roleCount].RoleName" value="@role.RoleName" />
+                            <div class="layui-col-sm4 layui-col-md3 layui-col-lg2">
+                                <input type="checkbox" name="dtoList[@roleCount].RoleId" title="@role.RoleName" value="@role.Id" @isChecked>
+                            </div>
+                            roleCount++;
+                        }
+                    }
+                    else
+                    {
+                        <a>请创建角色！</a>
+                    }
+                }
+            </div>
+        </div>
+            @*<div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit lay-filter="fromSubmit">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>*@
+            <!-- 更多表单结构排版请移步文档左侧【页面元素-表单】一项阅览 -->
+        </form>
 </div>
 <div class="layui-card">
     <div class="layui-card-body">
@@ -39,110 +66,32 @@
     </div>
 </div>
 <script>
-    layui.use('form', function () {
-        var form = layui.form;
-        table = layui.table
-            , $ = layui.$
-            , laytpl = layui.laytpl
-            , dropdown = layui.dropdown;
-
-        window.ins = table.render({
-            elem: '#test'
-            , limit: 10
-            //, height: 860
-            //,width: 600
-            , title: '用户数据表'
-            , url: '@Model'
-            , method: 'Post'
-            , request: {
-                pageName: 'curr' //页码的参数名称，默认：page
-                , limitName: 'nums' //每页数据量的参数名，默认：limit
-            }
-            , parseData: function (res) { //把数据转换为指定格式code,msg,count,data //res 即为原始返回的数据
-                return {
-                    "code": res.code, //解析接口状态
-                    "msg": res.msg, //解析提示文本
-                    "count": res.count, //解析数据长度
-                    "data": res.data //解析数据列表
-                };
-            }
-            //,size: 'lg'
-            , page: {
-
-            }
-            //,autoSort: false //是否自动排序。如果否，则由服务端排序
-            //,loading: false
-            , totalRow: true
-            , limit: 20
-            , toolbar: '#toolbar'
-            , defaultToolbar: ['filter', 'exports', 'print', {
-                title: '帮助'
-                , layEvent: 'LAYTABLE_TIPS'
-                , icon: 'layui-icon-tips'
-            }]
-            , cols: [[
-                { type: 'checkbox', fixed: 'left' }
-                , { field: 'xuhao', title: '序号', type: 'numbers' }
-                , { field: 'roleName', title: '用户名', width: 120, edit: 'text', templet: '#usernameTpl' }
-          
-            ]]
-            , initSort1: {
-                field: 'experience' //排序字段，对应 cols 设定的各字段名
-                , type: 'desc' //排序方式  asc: 升序、desc: 降序、null: 默认排序
-            }
-            , headers: { headers_token: 'sasasas' }
-            , where: {
-                test: '初始 test 参数'
-                , token: '初始 token'
-                , key: 'experience'
-                , order: 'asc'
-            }
-
-            , done: function () {
-                //下拉菜单
-                dropdown.render({
-                    elem: '#dropdown' //可绑定在任意元素中，此处以上述按钮为例
-                    , data: [{
-                        id: 0,
-                        title: '刷新'
-                    }]
-                    //菜单被点击的事件
-                    , click: function (obj) {
-                        //table.reload('test');
-                    }
-                });
-            }
-            , error: function (res, msg) {
-                console.log(res, msg)
-            }                     
+    function userRoleSubmit() {
+        var userRole = [];
+        $('input:checked').each(function () {
+            var data = { UserId: '@Model.Id', UserName: '@Model.UserName', RoleName: this.title, RoleId: this.value };
+            userRole.push(data);
         });
-
-
-        //监听提交
-        debugger;
-        form.on('submit(fromSubmit)', function (data) {
-            console.log(JSON.stringify(data.field));
-            $.ajax({
-                type: "post",
-                dataType: "json",
-                data: data.field,
-                url: '@Url.Action("UserAuthorizationSave", "User")',
-                success: function (message) {
-                    if (message == "") {
-                        layer.msg('角色分配成功！');
-                        parent.layer.closeAll()
-                        parent.reload();
-                    }
-                    else {
-                        layer.msg(message);
-                        return false;
-                    }
-                }, error: function (e) {
-                    layer.msg("请求异常，请重试", { shift: 6 })
+        console.log(userRole);
+        var data = { 'userId': '@Model.Id', 'userRole': userRole };
+        $.ajax({
+            type: "post",
+            dataType: "json",
+            data: data,
+            url: '@Url.Action("UserRoleSave", "User")',
+            success: function (message) {
+                if (message == "") {
+                    obj.del();
+                    layer.close(index);
+                    layer.msg('删除成功');
                 }
-            })
-            return false;
+                else {
+                    layer.msg(message);
+                    return false;
+                }
+            }, error: function (e) {
+                layer.msg("请求异常，请重试", { shift: 6 })
+            }
         });
-
-    });
+    }
 </script>

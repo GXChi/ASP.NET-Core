@@ -20,6 +20,8 @@ namespace CloudNote.Service.UserApp
 
         void DeleteBatch(List<Guid> ids);
 
+        bool SetRole(string userId, List<UserRoleDto> userRole);
+
         //List<UserDto> GetPage(int startPage, int pageSize, out int rowCount, Expression<Func<UserEntity, bool>> where, Expression<Func<UserEntity, object>> order);
 
     }

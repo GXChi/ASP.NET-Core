@@ -23,28 +23,7 @@ namespace CloudNote.Web.Areas.Admin.Controllers
             ViewData["Name"] = "角色管理";
             return View();
         }
-
-        [HttpPost]
-        public JsonResult Index(Guid id, int curr = 1, int nums = 20)
-        {
-            ViewData["Name"] = "角色管理";
-            string strJson = string.Empty;
-            int count;
-            JsonData<RoleDto> jsonData = new JsonData<RoleDto>();
-            if (id == Guid.Empty)
-            {
-                jsonData.Data = _roleAppService.GetPageList(curr, nums, out count, null, x => x.CreateDate);
-                jsonData.Count = count;
-            }
-            else
-            {
-                var data = _roleAppService.GetPageList(curr, nums, out count, x => x.Id == id, x => x.CreateDate);
-                jsonData.Data = data;
-                jsonData.Count = count;
-            }
-            return Json(jsonData); ;
-        }
-
+       
         public IActionResult Edit(Guid id)
         {
             var user = _roleAppService.GetById(id);

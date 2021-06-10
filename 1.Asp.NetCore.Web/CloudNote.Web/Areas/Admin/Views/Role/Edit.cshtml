@@ -58,13 +58,13 @@
         var form = layui.form;
         //监听提交
         debugger;
-        form.on('submit(fromSubmit)', function (data) {
+        form.on('submit(layui-layer-btn0)', function (data) {
             console.log(JSON.stringify(data.field));
             $.ajax({
                 type: "post",
                 dataType: "json",
                 data: data.field,
-                url: '@Url.Action("Save", "Role")',
+                @*url: '@Url.Action("Save", "Role")',*@
                 success: function (message) {
                     if (message == "") {
                         layer.msg('信息修改成功');

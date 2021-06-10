@@ -1,5 +1,4 @@
-﻿/** layuiAdmin.std-v1.6.1 LPPL License */
-html #layuicss-layuiAdmin {
+﻿html #layuicss-layuiAdmin {
     display: none;
     position: absolute;
     width: 1989px
@@ -87,7 +86,8 @@ html {
         bottom: 0;
         left: 0;
         right: 0;
-        overflow: hidden
+        overflow: hidden;
+        overflow-y: auto
     }
 
 .layui-layout-admin .layui-header .layui-nav-img {
@@ -250,12 +250,6 @@ html {
     padding: 0
 }
 
-.layui-header .layui-nav-item .layui-icon {
-    position: relative;
-    top: 1px;
-    font-size: 16px
-}
-
 .layui-header .layui-layout-right .layui-badge-dot {
     margin-left: 0
 }
@@ -290,26 +284,19 @@ html {
 }
 
     .layui-side-menu .layui-nav .layui-nav-item a {
-        height: 40px;
-        line-height: 40px;
         padding-left: 45px;
         padding-right: 30px
     }
 
-    .layui-side-menu .layui-nav .layui-nav-item > a {
-        padding-top: 8px;
-        padding-bottom: 8px
-    }
-
-    .layui-side-menu .layui-nav .layui-nav-item a:hover {
-        background: 0 0
-    }
+        .layui-side-menu .layui-nav .layui-nav-item a:hover {
+            background: 0 0
+        }
 
     .layui-side-menu .layui-nav .layui-nav-itemed > .layui-nav-child {
         padding: 5px 0
     }
 
-    .layui-side-menu .layui-nav .layui-nav-item .layui-icon {
+    .layui-side-menu .layui-nav > .layui-nav-item .layui-icon:first-child {
         position: absolute;
         top: 50%;
         left: 20px;
@@ -323,10 +310,6 @@ html {
         .layui-side-menu .layui-nav .layui-nav-child .layui-nav-child a {
             padding-left: 60px
         }
-
-    .layui-side-menu .layui-nav .layui-nav-more {
-        right: 15px
-    }
 
 @media screen and (max-width:992px) {
     .layui-layout-admin .layui-side {

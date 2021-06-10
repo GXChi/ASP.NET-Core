@@ -31,7 +31,7 @@ namespace CloudNote.Core.SqlServer.Repositories
             var user = _dbContext.Set<UserEntity>().FirstOrDefault(x => x.Id == id);
             if (user != null)
             {
-                //user.UserRoles = _dbContext.Set<UserRoleEntity>().Where(x => x.UserId == id.ToString()).ToList();
+                user.UserRoles = _dbContext.Set<UserRoleEntity>().Where(x => x.UserId == id.ToString()).ToList();
             }
             return user;
         }

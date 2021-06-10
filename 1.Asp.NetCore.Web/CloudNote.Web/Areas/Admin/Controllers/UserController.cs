@@ -27,48 +27,7 @@ namespace CloudNote.Web.Areas.Admin.Controllers
         public IActionResult Index()
         {
             ViewData["Name"] = "用户管理";
-            //var list = _userAppService.GetAllList();
             return View(); ;
-        }
-
-        //[HttpPost]
-        //public JsonResult Index(Guid id)
-        //{
-        //    ViewData["Name"] = "用户管理";
-        //    string strJson = string.Empty;
-        //    JsonData<UserDto> jsonData = new JsonData<UserDto>();
-        //    if (id == Guid.Empty)
-        //    {
-        //        var data = _userAppService.GetAllList();
-        //        jsonData.Data = data;
-        //        jsonData.Count = data.Count;
-        //    }
-        //    else
-        //    {
-        //        jsonData.Data = new List<UserDto>() { _userAppService.GetUserById(id) };
-        //    }
-        //    return Json(jsonData); ;
-        //}
-
-        [HttpPost]
-        public JsonResult Index(Guid id, int curr = 1, int nums = 20)
-        {
-            ViewData["Name"] = "用户管理";
-            string strJson = string.Empty;
-            int count;
-            JsonData<UserDto> jsonData = new JsonData<UserDto>();
-            if (id == Guid.Empty)
-            {
-                jsonData.Data = _userAppService.GetAllList(curr, nums, out count, null, x => x.CreateDate);                
-                jsonData.Count = count;
-            }
-            else
-            {
-                var data = _userAppService.GetAllList(curr, nums, out count, x=>x.Id == id, x => x.CreateDate);
-                jsonData.Data = data;
-                jsonData.Count = count;
-            }
-            return Json(jsonData); ;
         }
 
         public IActionResult Edit(Guid id)
@@ -108,7 +67,6 @@ namespace CloudNote.Web.Areas.Admin.Controllers
             return Json(message);
         }
 
-
         [HttpPost]
         public JsonResult Delete(Guid id)
         {
@@ -126,30 +84,18 @@ namespace CloudNote.Web.Areas.Admin.Controllers
 
         public IActionResult UserAuthorization(Guid id)
         {
-            JsonData<UserDto> userData = new JsonData<UserDto>();
-            userData.Data = new List<UserDto>();
-            userData.Data.Add(_userAppService.GetUserById(id));
-
-            if (userData.Data != null && userData.Data.Count > 0)
-            {
-                ViewBag.UserRole = userData;
-            }
-
-            JsonData<RoleDto> roleData = new JsonData<RoleDto>();
-            roleData.Data = _roleAppService.GetAllList();
-            ViewBag.RoleData = roleData;
-
-            JsonData<UserRoleDto> userRoleData = new JsonData<UserRoleDto>();
-            userRoleData.Data = _userRoleAppService.GetAllList(null);
-            return View(userRoleData); 
+            var userData = _userAppService.GetUserById(id);
+            ViewBag.RoleData = _roleAppService.GetAllList();
+            return View(userData);
         }
 
-        public JsonResult UserAuthorizationSave(UserRoleDto dto)
+        [HttpPost]
+        public JsonResult UserRoleSave(string userId, List<UserRoleDto> userRole)
         {
             var message = string.Empty;
             try
             {
-                if (!_userRoleAppService.InsertOrUpdate(dto))
+                if (!_userRoleAppService.SetRole(userId, userRole))
                 {
                     message = "用户分配角色失败！";
                 }

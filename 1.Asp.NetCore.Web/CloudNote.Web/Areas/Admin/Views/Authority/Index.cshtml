@@ -1,6 +1,4 @@
 ﻿@model List<CloudNote.Service.UserApp.Dtos.UserDto>
-<script src="~/lib/jquery/dist/jquery.js"></script>
-<script src="~/layui/dist/layui.js"></script>
 <script type="text/html" id="toolbar">
     <div class="layui-btn-container">
         <button class="layui-btn layui-btn-sm" lay-event="add">新增</button>
@@ -44,7 +42,7 @@
             //, height: 860
             //,width: 600
             , title: '用户数据表'
-            , url: 'Authority/Index'
+            , url: 'DataProvide/GetAuthorityData'
             , method: 'Post'
             , request: {
                 pageName: 'curr' //页码的参数名称，默认：page
